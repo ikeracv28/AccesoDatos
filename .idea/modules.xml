@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AccesoAleatorio/AccesoAleatorio.iml" filepath="$PROJECT_DIR$/AccesoAleatorio/AccesoAleatorio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/AccesoDatos.iml" filepath="$PROJECT_DIR$/.idea/AccesoDatos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LecturaSecuencial/LecturaSecuencial.iml" filepath="$PROJECT_DIR$/LecturaSecuencial/LecturaSecuencial.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RutasEjemplo/RutasEjemplo.iml" filepath="$PROJECT_DIR$/RutasEjemplo/RutasEjemplo.iml" />
+    </modules>
+  </component>
+</project>

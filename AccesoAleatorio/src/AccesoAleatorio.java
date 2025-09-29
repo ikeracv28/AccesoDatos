@@ -5,7 +5,7 @@ public class AccesoAleatorio {
     public static void main(String[] args) {
         try{
             RandomAccessFile raf = new RandomAccessFile("datos.txt", "r");
-            long posicion = 15;
+            long posicion = 30;
             raf.seek(posicion);
 
             System.out.println("Lectura desde byte " + posicion + ":");
