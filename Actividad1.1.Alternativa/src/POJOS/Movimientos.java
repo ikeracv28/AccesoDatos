@@ -6,11 +6,14 @@ public class Movimientos {
     private String fecha;
     private String concepto;
 
-    public Movimientos(boolean tipo, double cantidad, String concepto) {
+    public Movimientos(boolean tipo, double cantidad, String fecha, String concepto) {
         this.tipo = tipo;
         this.cantidad = cantidad;
+        this.fecha = fecha;
         this.concepto = concepto;
     }
+
+    public Movimientos() {}
 
     public boolean getTipo() {
         return tipo;

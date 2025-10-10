@@ -7,6 +7,10 @@ public class Cliente {
     private double saldo;
 
 
+    public Cliente() {
+        this.saldo = 0;
+    }
+
     public Cliente(String nombre, String DNI, String nCuenta) {
         this.nombre = nombre;
         this.DNI = DNI;
@@ -30,7 +34,13 @@ public class Cliente {
         return saldo;
     }
 
-    public void setSaldo(double saldo) {
+    public void actualizarSaldo(double saldo) {
         this.saldo += saldo;
+
     }
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+
+    }
+
 }
