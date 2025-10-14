@@ -207,34 +207,7 @@ public class Cuenta {
         }
     }
 
-    // metodo para retirar dinero
-    public void retirarDinero(){
-        try {
-            // esto simplemente es para poner la fecha en el formto que se pide
-            Date fechaActual = new Date();
-            SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
-
-
-            while(true){
-            System.out.println("Dime cuanto dinero quieres retirar: ");
-            double dineroRetirar = sc.nextDouble();
-            sc.nextLine();
-            if(dineroRetirar <= cliente.getSaldo()){
-                cliente.actualizarSaldo(-dineroRetirar);
-                System.out.println("Dime el concepto de esta transaccion");
-                String concepto = sc.nextLine();
-                String fecha = formato.format(fechaActual);
-                registrarMovimientos(false, String.valueOf(dineroRetirar) ,fecha, concepto );
-                registrarSaldo(cliente.getSaldo());
-                break;
-            }else {
-                System.out.println("No puede retirar mas dinero del que tienes");
-            }
-            }
-        }catch (NumberFormatException e) {
-            System.out.println("Retirada no valido");
-        }
-    }
+   u
 
     public void consultarSaldo() {
         /*
