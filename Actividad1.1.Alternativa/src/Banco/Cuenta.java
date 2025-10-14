@@ -50,7 +50,7 @@ public class Cuenta {
     public void comprobarCuenta() {
         try (BufferedReader leerTitular = new BufferedReader(new FileReader("datos/titular.txt"));
              BufferedWriter escribirTitular = new BufferedWriter(new FileWriter("datos/titular.txt", true));
-             BufferedWriter escribirSaldo = new BufferedWriter(new FileWriter("datos/saldo.txt"))) {
+             BufferedWriter escribirSaldo = new BufferedWriter(new FileWriter("datos/saldo.txt",true))) {
 
             // si el archivo esta vacio, le pedimos sus datos
             if (leerTitular.readLine() == null) {
@@ -79,19 +79,38 @@ public class Cuenta {
                 */
 
             }else {
-                BufferedReader leerTitular1 = new BufferedReader(new FileReader("datos/titular.txt"));
-                String nombre =  leerTitular1.readLine();
-                String DNI = leerTitular1.readLine();
-                String nCuenta = leerTitular1.readLine();
-                //Cliente cliente = new Cliente(nombre, DNI, nCuenta);
-                // para mostrarlo como pide el ejercicio por consola
-                System.out.println(nombre);
-                System.out.println(DNI);
-                System.out.println(nCuenta);
+               cargarCuenta();
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void cargarCuenta(){
+        try (BufferedReader leerTitular1 = new BufferedReader(new FileReader("datos/titular.txt"));
+             BufferedReader leerSaldo = new BufferedReader(new FileReader("datos/saldo.txt"))) {
+
+            String nombre = leerTitular1.readLine();
+            String DNI = leerTitular1.readLine();
+            String nCuenta = leerTitular1.readLine();
+            String saldo = leerSaldo.readLine();
+            //Cliente cliente = new Cliente(nombre, DNI, nCuenta);
+            // para mostrarlo como pide el ejercicio por consola
+
+            cliente = new Cliente(nombre, DNI, nCuenta);
+            cliente.setSaldo(Double.parseDouble(saldo));
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+
+        }
+    }
+
+    public void mostrarDatos(){
+        System.out.println(cliente.getNombre());
+        System.out.println(cliente.getDNI());
+        System.out.println(cliente.getnCuenta());
+        System.out.println(cliente.getSaldo());
     }
 
     // con este metodo se registra
@@ -123,18 +142,20 @@ public class Cuenta {
     // COn este metoddo vamos a mostrar el movimiento
     public void mostrarMovimientos(){
         try(BufferedReader leerMovimiento = new BufferedReader(new FileReader("datos/movimiento.txt"))){
+                String linea;
 
-            if (leerMovimiento.readLine() == null) {
-                System.out.println("no hay movimientos de momento");
+                while((linea = leerMovimiento.readLine()) != null){
 
-            }else{
-                String linea = leerMovimiento.readLine();
+                    System.out.println(linea);
+                }
 
-                String tipo =  linea.split(";")[0];
+
+               /* String tipo =  linea.split(";")[0];
                 boolean comprobacion = tipo.equals("INGRESO") ? true : false;
                 String cantidad = linea.split(";")[1];
                 String fecha = linea.split(";")[2];
                 String concepto = linea.split(";")[3];
+
 
                 //Movimientos movimientos = new Movimientos(comprobacion, Double.parseDouble(cantidad), fecha, concepto);
 
@@ -143,8 +164,9 @@ public class Cuenta {
                 System.out.println(cantidad);
                 System.out.println(fecha);
                 System.out.println(concepto);
-            }
-        }catch (IOException e){
+                */
+
+            } catch (IOException e){
 
         }
     }
@@ -161,7 +183,7 @@ public class Cuenta {
     // metodo para ingresar dinero
     public void ingresarDinero(){
         try{
-            cliente = new Cliente();
+
 
             // esto simplemente es para poner la fecha en el formto que se pide
             Date fechaActual = new Date();
@@ -171,9 +193,9 @@ public class Cuenta {
 
             System.out.println("Dime cuanto dinero quieres ingresar: ");
             dineroIngresar = sc.nextLine();
-            dineroIngresar = dineroIngresar.replace(',', '.'); // Reemplaza el punto por la coma
+            dineroIngresar = dineroIngresar.replace(',', '.'); // Reemplaza la coma  por el punto
 
-            cliente.setSaldo(cliente.getSaldo() + Double.parseDouble(dineroIngresar));
+            cliente.actualizarSaldo(cliente.getSaldo() + Double.parseDouble(dineroIngresar));
             System.out.println("Dime el concepto de esta transaccion");
             String concepto = sc.nextLine();
             String fecha = formato.format(fechaActual);
@@ -196,8 +218,9 @@ public class Cuenta {
             while(true){
             System.out.println("Dime cuanto dinero quieres retirar: ");
             double dineroRetirar = sc.nextDouble();
+            sc.nextLine();
             if(dineroRetirar <= cliente.getSaldo()){
-                cliente.setSaldo(-dineroRetirar);
+                cliente.actualizarSaldo(-dineroRetirar);
                 System.out.println("Dime el concepto de esta transaccion");
                 String concepto = sc.nextLine();
                 String fecha = formato.format(fechaActual);
@@ -213,7 +236,8 @@ public class Cuenta {
         }
     }
 
-    public void consultarSaldo(){
+    public void consultarSaldo() {
+        /*
         try(BufferedReader leerSaldo = new BufferedReader(new FileReader("datos/saldo.txt"))){
             if (leerSaldo.readLine() == null) {
                 double setSaldo = 0;
@@ -228,6 +252,8 @@ public class Cuenta {
             System.out.println(e.getMessage());
         }
     }
-
+*/
+        System.out.println(cliente.getSaldo());
+    }
 }
 

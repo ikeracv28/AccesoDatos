@@ -14,6 +14,7 @@ public class GestionCuenta {
 
     // lo primero que haces es comprobar que existen los archivos
         cuenta.comprobarArchivos();
+        cuenta.comprobarCuenta();
         System.out.println("Bienvenido al banco, eligue una opcion del menu");
         while(true){
             menu.menuBanco();
@@ -25,7 +26,7 @@ public class GestionCuenta {
                     cuenta.consultarSaldo();
                     break;
                 case 2:
-                    cuenta.comprobarCuenta();
+                    cuenta.mostrarDatos();
                     break;
                 case 3:
                     cuenta.mostrarMovimientos();

@@ -17,6 +17,13 @@ public class Cliente {
         this.nCuenta = nCuenta;
         this.saldo = 0;
     }
+    public Cliente(String nombre, String DNI, String nCuenta, double saldo) {
+        this.nombre = nombre;
+        this.DNI = DNI;
+        this.nCuenta = nCuenta;
+        this.saldo = saldo;
+    }
+
 
     public String getNombre() {
         return nombre;
