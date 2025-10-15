@@ -25,6 +25,7 @@ public class Cuenta implements Serializable {
 
         double saldo = 0;
         for(Movimiento movimiento :movimientos) {
+            // suma la cantidad de cada movimiento al saldo
             saldo += movimiento.getCantidad();
         }
         return saldo;
@@ -39,36 +40,39 @@ public class Cuenta implements Serializable {
 
     // metodo para ingresar dinero
     public void ingresarDinero(){
-        try{
-            Double dineroIngresar;
-            System.out.println("Dime cuanto dinero quieres ingresar: ");
-            dineroIngresar = sc.nextDouble();
+        System.out.println("Dime cuanto dinero quieres ingresar: ");
+        if (sc.hasNextDouble()) {
+            double dineroIngresar = sc.nextDouble();
+            if (dineroIngresar > 0) {
+                movimientos.add(new Movimiento("Ingreso", dineroIngresar));
+                saldo += dineroIngresar;
+            } else {
+                System.out.println("La cantidad tiene que ser positiva");
+            }
+        }else {
+            System.out.println("Por favor, introduce un número valido");
             sc.nextLine();
-            movimientos.add(new Movimiento("Ingreso", dineroIngresar));
-            saldo += dineroIngresar;
 
-
-        }catch(NumberFormatException e) {
-            System.out.println("Ingreso no valido");
         }
+
     }
 
     // metodo para retirar dinero
     public void retirarDinero(){
-        try{
-            double dineroRetirar;
-            System.out.println("Dime cuanto dinero quieres retirar: ");
-            dineroRetirar = sc.nextDouble();
-            if(dineroRetirar > saldo){
+        System.out.println("Dime cuanto dinero quieres retirar: ");
+        if(sc.hasNextDouble()){
+            double dineroRetirar = sc.nextDouble();
+            if(dineroRetirar <= 0){
+                System.out.println("La cantidad que vas a retirar tiene que ser mayor a 0");
+            } else if(dineroRetirar > saldo){
                 System.out.println("No puedes retirar mas dinero del que tienes");
             }else{
-                sc.nextLine();
                 movimientos.add(new Movimiento("Retirada", dineroRetirar));
                 saldo -= dineroRetirar;
             }
-
-        }catch(NumberFormatException e) {
-            System.out.println(e.getMessage());
+        }else {
+            System.out.println("Por favor, introduce un número valido");
+            sc.nextLine();
         }
     }
 
