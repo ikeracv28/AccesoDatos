@@ -71,7 +71,7 @@ public class Libro {
     }
 
     public void crearArchivosLibro() {
-        File fDtos = new File("datos_libreria");
+        File fDtos = new File("datos_librerias");
         if (!fDtos.exists()) {
             fDtos.mkdir();
         }
@@ -123,7 +123,7 @@ public class Libro {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        return false;
+        return true;
     }
 
     public void nuevoLibro() {
@@ -267,7 +267,20 @@ public class Libro {
     public void avisoStockMenor5(){
         try(BufferedReader brLibro = new BufferedReader(new FileReader("datos_librerias/libros.txt"))){
 
+            String linea;
+            while((linea = brLibro.readLine()) != null){
+                String[] partes = linea.split(";");
+                if (partes.length == 6) {
+                    int stock =  Integer.parseInt(partes[5]);
+                        if (stock < 5) {
+                            System.out.println("Hay que reponer stock de este libro: " + partes[0] + " - " + partes[1] + " - " + partes[2] + " - " + partes[3] + " - " + partes[4] + " - " + partes[5]);
+                        }
+                    }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
     }
 
 }
