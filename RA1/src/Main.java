@@ -39,7 +39,7 @@ public class Main {
                 }
 
             } else {
-                System.out.println("Por favor, ingrese un número válido.");
+                System.out.println("Por favor, ingrese un número válido");
                 sc.next();
             }
 
