@@ -7,6 +7,7 @@ public class Main {
         ejercicio1();
         ejercicio2();
         ejercicio3();
+        ejercicio4();
     }
 
     public static void ejercicio1() {
@@ -54,7 +55,28 @@ public class Main {
         }
     }
 
-    static void ejercicio4(){
+    public static void ejercicio4(){
+        System.out.println("--------------------------------------");
+        double total=0;
+        for(Producto p : inventario){
+            total += p.getPrecio();
+        }
+        System.out.println("El total es de : " + total + "€");
+        // Obtener el producto más caro sin reordenar la lista
+        if(inventario.isEmpty()){
+            System.out.println("El inventario está vacío.");
+        } else {
+            Producto masCaro = inventario.stream()
+                    .max(java.util.Comparator.comparingDouble(Producto::getPrecio))
+                    .orElse(inventario.get(0));
+            System.out.println("El producto mas caro es: " + masCaro);
+        }
+        System.out.println("Productos mayores de 50");
+        for(Producto p : inventario){
+            if(p.getPrecio()>50){
+                System.out.println(p);
+            }
+        }
 
 
 
