@@ -9,12 +9,12 @@ public class Movimiento implements Serializable {
         this.cantidad = cantidad;
     }
 
-    // es para ver los datos de Movimiento de form legible, me lo genera el propio intellij
     @Override
     public String toString() {
-        return "Movimiento" +
+        return "Movimiento{" +
                 "cantidad=" + cantidad +
-                ", tipo='" + tipo + '\'';
+                ", tipo='" + tipo + '\'' +
+                '}';
     }
 
     public Movimiento() {}

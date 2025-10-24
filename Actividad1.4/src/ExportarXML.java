@@ -1,161 +1,198 @@
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ExportarXML {
+    // Ruta del archivo XML
+    static String fecha;
+    private static final String ARCHIVO = "xml/estudiantes_";
+    private static final String NODOPADRE = "clase";
+    private static final String NODOHIJO = "estudiantes";
 
-    // Método que recibe una lista de estudiantes y genera un archivo XML con sus datos
-    public void excribirXML(List<Estudiante> estudiantes) {
 
-        // ======================================================
-        // 1️⃣ CREACIÓN DE LA CARPETA "datos" (si no existe)
-        // ======================================================
+    private static final String INDENTACION = "    ";
+    private static final String INDENTACION2 = INDENTACION + INDENTACION;
+    private static final String INDENTACION3 = INDENTACION2 + INDENTACION;
+
+
+    private static final String CARPETA = "XML"; // NOMBRE CARPETA
+    private static final String EXTENSION = ".xml"; // NOMBRE CARPETA
+
+    /**
+     * Escapa caracteres especiales que tienen significado en XML para evitar
+     * romper la estructura del documento o introducir vulnerabilidades.
+     * <p>
+     * Convierte:
+     * &  -> &amp;
+     * <  -> &lt;
+     * >  -> &gt;
+     * "  -> &quot;
+     * '  -> &apos;
+     * <p>
+     * Importante: el orden de reemplazo importa (primero '&') cuando se
+     * hace con reemplazos en cadena; aquí procesamos carácter a carácter
+     * para evitar dobles escapes.
+     * <p>
+     * Si la entrada es null se devuelve cadena vacía.
+     * <p>
+     * Ejemplo:
+     * entrada:  Tom & Jerry <3
+     * salida:   Tom &amp; Jerry &lt;3
+     * <p>
+     * Uso: llamar antes de insertar valores de texto dentro de elementos o
+     * atributos XML.
+     *
+     * @param texto texto sin escapar
+     * @return texto con los caracteres XML especiales escapados
+     */
+
+    private static String escapeXml(String texto) {
+        if (texto == null || texto.isEmpty()) {
+            return "";
+        }
+
+        // IMPORTANTE: El orden importa - escapar & primero
+        return texto.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&apos;");
+    }
+
+    /**
+     * Asegura que exista el directorio donde se guardará el archivo.
+     * Lanza IOException si no puede crear el directorio.
+     */
+    private static boolean crearCarpeta() {
         try {
-            File carpeta = new File("datos"); // Creamos un objeto File apuntando a la carpeta "datos"
+            File dir = new File(CARPETA);
+            if (!dir.exists() && !dir.mkdirs()) {
+                return false;
 
-            // Si la carpeta no existe, la creamos con mkdir()
-            if (!carpeta.exists()) {
-                carpeta.mkdir();
             }
-
+            return true;
         } catch (Exception e) {
-            // Si ocurre algún error (por ejemplo, permisos denegados), mostramos el mensaje
-            System.out.println("Error al crear la carpeta: " + e.getMessage());
+            System.out.println(e.getMessage());
+            return false;
         }
+    }
 
-        // ======================================================
-        // 2️⃣ CREACIÓN DEL ARCHIVO "estudiantes.xml"
-        // ======================================================
+    /**
+     * Escribe la lista completa de estudiantes en `datos/estudiantes.xml`.
+     * Sobrescribe el archivo con una estructura XML bien formada y un resumen de notas.
+     * <p>
+     * estudiantes lista de objetos Estudiante (debe existir la clase Estudiante con getters usados)
+     */
+
+    public static String crearNombreArchivo() {
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+        fecha = LocalDateTime.now().format(formatter);
+        return ARCHIVO + fecha + EXTENSION;
+    }
+
+    public static void escribirXmlExacto(List<Estudiante> estudiantes) {
         try {
-            File archivo = new File("datos/estudiantes.xml"); // Creamos el archivo dentro de la carpeta "datos"
 
-            // Si el archivo no existe aún, se crea con createNewFile()
-            if (!archivo.exists()) {
-                archivo.createNewFile();
+
+            String nombreArchivo = crearNombreArchivo();
+
+            if (estudiantes == null || estudiantes.isEmpty()) {
+                System.out.println("ERROR: No hay productos para exportar.");
+                return;
             }
 
-        } catch (IOException e) {
-            System.out.println("Error al crear el archivo XML: " + e.getMessage());
-        }
-
-        // ======================================================
-        // 3️⃣ ESCRITURA DEL CONTENIDO DEL XML
-        // ======================================================
-        // Usamos try-with-resources para que el BufferedWriter se cierre automáticamente al finalizar
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("datos/estudiantes.xml"))) {
-
-            // ------------------------------------------------------
-            // CÁLCULO DE ESTADÍSTICAS (usando Streams de Java)
-            // ------------------------------------------------------
-            // Con estos cálculos evitamos escribir los valores manualmente
-            // mapToDouble() transforma cada Estudiante en su nota (double)
-            // average(), max(), min() calculan las estadísticas principales
-            // orElse(0) devuelve 0 si la lista está vacía (evita errores)
-            double notaMedia = estudiantes.stream().mapToDouble(Estudiante::getNota).average().orElse(0);
-            double notaMax = estudiantes.stream().mapToDouble(Estudiante::getNota).max().orElse(0);
-            double notaMin = estudiantes.stream().mapToDouble(Estudiante::getNota).min().orElse(0);
-
-            // ------------------------------------------------------
-            // ESCRITURA DE LA ESTRUCTURA XML
-            // ------------------------------------------------------
-
-            // Declaración estándar del encabezado XML
-            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            writer.newLine();
-
-            // Apertura del elemento raíz <clase>
-            writer.write("<clase>");
-            writer.newLine();
-
-            // ------------------------------------------------------
-            // SECCIÓN DE METADATOS
-            // ------------------------------------------------------
-            writer.write("  <metadata>");
-            writer.newLine();
-
-            // Fecha de creación del archivo (en este caso, fija)
-            writer.write("    <fecha>19/10/2025</fecha>");
-            writer.newLine();
-
-            // Total de estudiantes incluidos en el XML
-            writer.write("    <totalEstudiantes>" + estudiantes.size() + "</totalEstudiantes>");
-            writer.newLine();
-
-            writer.write("  </metadata>");
-            writer.newLine();
-
-            // ------------------------------------------------------
-            // SECCIÓN DE ESTUDIANTES
-            // ------------------------------------------------------
-            writer.write("  <estudiantes>");
-            writer.newLine();
-
-            // Recorremos la lista recibida como parámetro y escribimos cada estudiante
-            for (Estudiante e : estudiantes) {
-                // Apertura del elemento <estudiante> con su atributo id
-                writer.write("    <estudiante id=\"" + e.getId() + "\">");
-                writer.newLine();
-
-                // Escribimos los datos de cada campo del estudiante
-                writer.write("      <nombre>" + e.getNombre() + "</nombre>");
-                writer.newLine();
-
-                // OJO: el método en tu clase debe llamarse getApellido(), no getApellido()
-                writer.write("      <apellidos>" + e.getApellido() + "</apellidos>");
-                writer.newLine();
-
-                writer.write("      <edad>" + e.getEdad() + "</edad>");
-                writer.newLine();
-
-                writer.write("      <nota>" + e.getNota() + "</nota>");
-                writer.newLine();
-
-                // Cierre del elemento estudiante
-                writer.write("    </estudiante>");
-                writer.newLine();
+            if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
+                System.out.println("ERROR: El nombre del archivo no puede estar vacío.");
+                return;
             }
 
-            // Cierre del bloque de estudiantes
-            writer.write("  </estudiantes>");
-            writer.newLine();
 
-            // ------------------------------------------------------
-            // SECCIÓN DE RESUMEN / ESTADÍSTICAS
-            // ------------------------------------------------------
-            writer.write("  <resumen>");
-            writer.newLine();
+            if (crearCarpeta()) {
 
-            // Usamos String.format("%.2f", ...) para limitar la nota media a 2 decimales
-            writer.write("    <notaMedia>" + String.format("%.2f", notaMedia) + "</notaMedia>");
-            writer.newLine();
+                double suma = estudiantes.stream().mapToDouble(Estudiante::getNota).sum();
+                double media = estudiantes.isEmpty() ? 0.0 : suma / estudiantes.size();
+                double maxima = estudiantes.stream().mapToDouble(Estudiante::getNota).max().orElse(0.0);
+                double minima = estudiantes.stream().mapToDouble(Estudiante::getNota).min().orElse(0.0);
 
-            writer.write("    <notaMaxima>" + notaMax + "</notaMaxima>");
-            writer.newLine();
 
-            writer.write("    <notaMinima>" + notaMin + "</notaMinima>");
-            writer.newLine();
+                File archivo;
+                archivo = new File(nombreArchivo);
+                boolean creado = archivo.createNewFile();
+                if (creado) {
 
-            writer.write("  </resumen>");
-            writer.newLine();
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true));
 
-            // ------------------------------------------------------
-            // CIERRE DEL DOCUMENTO
-            // ------------------------------------------------------
-            writer.write("</clase>");
-            writer.newLine();
 
-            // Mensaje por consola para confirmar que todo ha ido bien
-            System.out.println("Archivo XML generado correctamente.");
+                    // Declaración XML y elemento raíz
+                    bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                    bw.newLine();
+                    bw.write("<" + NODOPADRE + ">");
+                    bw.newLine();
+
+
+                    // Metadata
+                    bw.write(INDENTACION + "<metadata>");
+                    bw.newLine();
+                    bw.write(INDENTACION2 + "<fecha>" + escapeXml(fecha) + "</fecha>");
+                    bw.newLine();
+                    bw.write(INDENTACION2 + "<totalEstudiantes>" + estudiantes.size() + "</totalEstudiantes>");
+                    bw.newLine();
+                    bw.write(INDENTACION + "</metadata>");
+                    bw.newLine();
+
+
+                    // Lista de estudiantes
+                    bw.write(INDENTACION + "<" + NODOHIJO + ">");
+                    bw.newLine();
+                    for (Estudiante e : estudiantes) {
+                        bw.write(INDENTACION2 + "<estudiante id=\"" + escapeXml(String.valueOf(e.getId())) + "\">");
+                        bw.newLine();
+                        bw.write(INDENTACION3 + "<nombre>" + escapeXml(e.getNombre()) + "</nombre>");
+                        bw.newLine();
+                        bw.write(INDENTACION3 + "<apellidos>" + escapeXml(e.getApellido()) + "</apellidos>");
+                        bw.newLine();
+                        bw.write(INDENTACION3 + "<edad>" + e.getEdad() + "</edad>");
+                        bw.newLine();                                  // Decimales a mostrar
+                        bw.write(INDENTACION3 + "<nota>" + String.format("%.1f", e.getNota()) + "</nota>");
+                        bw.newLine();
+                        bw.write(INDENTACION2 + "</estudiante>");
+                        bw.newLine();
+                    }
+                    bw.write(INDENTACION + "</" + NODOHIJO + ">");
+                    bw.newLine();
+
+
+                    // Resumen de notas
+                    bw.write(INDENTACION + "<resumen>");
+                    bw.newLine();
+                    bw.write(INDENTACION2 + "<notaMedia>" + String.format("%.2f", media) + "</notaMedia>");
+                    bw.newLine();
+                    bw.write(INDENTACION2 + "<notaMaxima>" + String.format("%.1f", maxima) + "</notaMaxima>");
+                    bw.newLine();
+                    bw.write(INDENTACION2 + "<notaMinima>" + String.format("%.1f", minima) + "</notaMinima>");
+                    bw.newLine();
+                    bw.write(INDENTACION + "</resumen>");
+                    bw.newLine();
+
+                    bw.write("</" + NODOPADRE + ">");
+                    bw.newLine();
+                    bw.close();
+                } else {
+                    System.out.println("El archivo no se ha podido crear");
+                }
+
+            }
+
 
         } catch (IOException e) {
-            // Si ocurre un error durante la escritura, lo mostramos por consola
-            System.out.println("Error al escribir XML: " + e.getMessage());
+            // Mensaje de error claro en español
+            System.err.println("Error escribiendo XML: " + e.getMessage());
         }
     }
 }
+
 
 /* forma de la que lo he hecho yo manulmente, una vez hecho, le he pregvuntado a cht como hago par no
 tener que ir escribiendo yo los alumnos uno a uno, si no darle una lista y que me los añada

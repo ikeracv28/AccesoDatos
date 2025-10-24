@@ -16,10 +16,16 @@ public class Main {
                 new Estudiante(5, "Carlos", "Sánchez", 22, 6.5)
         );
 
-        ExportarCSV exportarCSV = new ExportarCSV();
-        exportarCSV.escribirCSV(estudiantes);
+        //ExportarCSV exportarCSV = new ExportarCSV();
+        //exportarCSV.escribirCSV(estudiantes);
+
+        ExportarCSVProfe exportarCSVProfe = new  ExportarCSVProfe();
+        exportarCSVProfe.exportarCSV(estudiantes);
 
         ExportarXML exportarXML = new ExportarXML();
+
         exportarXML.excribirXML(estudiantes);
+        ExportarJSON exportarJSON = new ExportarJSON();
+        exportarJSON.escribirJsonExacto(estudiantes);
     }
 }
