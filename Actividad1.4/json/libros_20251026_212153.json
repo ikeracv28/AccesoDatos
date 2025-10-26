@@ -1,0 +1,91 @@
+{
+    "biblioteca": {
+        "metadata": {
+            "fecha": "20251026_212153",
+            "totalLibros": 5,
+            "totalCategorias": 5
+        },
+        "categorias": [
+            {
+                "nombre": "Clásico",
+                "totalLibros": 1,
+                "totalPrestamos": 150,
+                "libros": [
+                    {
+                        "isbn": "978-84-123456-1",
+                        "titulo": "Don Quijote de la Mancha",
+                        "autor": "Miguel de Cervantes",
+                        "anio": 1605,
+                        "paginas": 863,
+                        "disponible": true,
+                        "prestamos": 150
+                    }
+                ]
+            },
+            {
+                "nombre": "Distopía",
+                "totalLibros": 1,
+                "totalPrestamos": 120,
+                "libros": [
+                    {
+                        "isbn": "978-84-123456-3",
+                        "titulo": "1984",
+                        "autor": "George Orwell",
+                        "anio": 1949,
+                        "paginas": 328,
+                        "disponible": true,
+                        "prestamos": 120
+                    }
+                ]
+            },
+            {
+                "nombre": "Fantasía",
+                "totalLibros": 1,
+                "totalPrestamos": 500,
+                "libros": [
+                    {
+                        "isbn": "978-84-123456-5",
+                        "titulo": "Harry Potter y la Piedra Filosofal",
+                        "autor": "J.K. Rowling",
+                        "anio": 1997,
+                        "paginas": 223,
+                        "disponible": true,
+                        "prestamos": 500
+                    }
+                ]
+            },
+            {
+                "nombre": "Ficción",
+                "totalLibros": 1,
+                "totalPrestamos": 200,
+                "libros": [
+                    {
+                        "isbn": "978-84-123456-2",
+                        "titulo": "Cien Años de Soledad",
+                        "autor": "Gabriel García Márquez",
+                        "anio": 1967,
+                        "paginas": 471,
+                        "disponible": false,
+                        "prestamos": 200
+                    }
+                ]
+            },
+            {
+                "nombre": "Épica",
+                "totalLibros": 1,
+                "totalPrestamos": 90,
+                "libros": [
+                    {
+                        "isbn": "978-84-123456-4",
+                        "titulo": "La Odisea",
+                        "autor": "Homero",
+                        "anio": -800,
+                        "paginas": 350,
+                        "disponible": true,
+                        "prestamos": 90
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,3 +1,9 @@
+package Exportaciones;
+
+import POJOS.Cliente;
+import POJOS.Cuenta;
+import POJOS.Movimiento;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,14 +12,17 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ExportarJSON {
+public class ExportarJson {
     // Ruta del archivo JSON
     static String fecha;
-    private static final String ARCHIVO = "json/estudiantes_";
-    private static final String NODOHIJO = "estudiantes";
-    private static final String NODOPADRE = "clase";
+    private static final String ARCHIVO = "json/cuenta";
+    private static final String NODOHIJO = "propietarios";
+    private static final String NODOHIJO2 = "movimientos";
+
+    private static final String NODOPADRE = "cuenta";
     private static final String INDENTACION = "    ";
     private static final String INDENTACION2 = INDENTACION + INDENTACION;
     private static final String INDENTACION3 = INDENTACION2 + INDENTACION;
@@ -71,28 +80,32 @@ public class ExportarJSON {
      * <p>
      * estudiantes: lista de objetos Estudiante (debe existir la clase Estudiante con getters usados)
      */
-    public static void escribirJsonExacto(List<Estudiante> estudiantes) {
+    public static void escribirJsonExacto(Cuenta cuenta) {
         try {
             String nombreArchivo = crearNombreArchivo();
 
             // PASO 1: VALIDACIONES
 
-            if (estudiantes == null || estudiantes.isEmpty()) {
-                System.out.println("❌ ERROR: No hay productos para exportar.");
+            if (cuenta == null ) {
+                System.out.println("ERROR: No hay productos para exportar.");
                 return;
             }
 
             if (nombreArchivo == null || nombreArchivo.trim().isEmpty()) {
-                System.out.println("❌ ERROR: El nombre del archivo no puede estar vacío.");
+                System.out.println("ERROR: El nombre del archivo no puede estar vacío.");
                 return;
             }
 
 
             if (crearCarpeta()) {
-                double suma = estudiantes.stream().mapToDouble(Estudiante::getNota).sum();
-                double media = estudiantes.isEmpty() ? 0.0 : suma / estudiantes.size();
-                double maxima = estudiantes.stream().mapToDouble(Estudiante::getNota).max().orElse(0.0);
-                double minima = estudiantes.stream().mapToDouble(Estudiante::getNota).min().orElse(0.0);
+
+                    /*
+                    double suma = estudiantes.stream().mapToDouble(Estudiante::getNota).sum();
+                    double media = estudiantes.isEmpty() ? 0.0 : suma / estudiantes.size();
+                    double maxima = estudiantes.stream().mapToDouble(Estudiante::getNota).max().orElse(0.0);
+                    double minima = estudiantes.stream().mapToDouble(Estudiante::getNota).min().orElse(0.0);
+
+                */
 
                 File archivo = new File(nombreArchivo);
                 boolean creado = archivo.createNewFile(); // debería crear el archivo con el timestamp
@@ -101,7 +114,11 @@ public class ExportarJSON {
                     try (BufferedWriter bw = new BufferedWriter(
                             new OutputStreamWriter(new FileOutputStream(archivo, true), StandardCharsets.UTF_8))) {
 
+
+
                         //Apertura
+                        Cliente cliente = cuenta.getCliente();
+                        ArrayList<Movimiento> movimientos = cuenta.getMovimientos();
 
 
                         bw.write("{");
@@ -116,43 +133,76 @@ public class ExportarJSON {
                         bw.newLine();
                         bw.write(INDENTACION3 + "\"fecha\": \"" + escapeJson(fecha) + "\",");
                         bw.newLine();
-                        bw.write(INDENTACION3 + "\"totalEstudiantes\": " + estudiantes.size());
+                        bw.write(INDENTACION3 + "\"totalMovimientos\": " + movimientos.size());
                         bw.newLine();
                         bw.write(INDENTACION2 + "},");
                         bw.newLine();
 
 
-                        // Lista de estudiantes
+                        // Lista de clientes
                         bw.write(INDENTACION2 + "\"" + NODOHIJO + "\": [");
                         bw.newLine();
 
-                        for (int i = 0; i < estudiantes.size(); i++) {
-                            Estudiante e = estudiantes.get(i);
+                        //for (int i = 0; i < estudiantes.size(); i++) {
 
 
-                            bw.write(INDENTACION3 + "{");
-                            bw.newLine();
-                            // id como string (fiel al tratamiento original de atributos en XML)
-                            bw.write(INDENTACION4 + "\"id\": \"" + escapeJson(String.valueOf(e.getId())) + "\",");
-                            bw.newLine();
-                            bw.write(INDENTACION4 + "\"nombre\": \"" + escapeJson(e.getNombre()) + "\",");
-                            bw.newLine();
-                            bw.write(INDENTACION4 + "\"apellidos\": \"" + escapeJson(e.getApellido()) + "\",");
-                            bw.newLine();
-                            bw.write(INDENTACION4 + "\"edad\": " + escapeJson(String.valueOf(e.getEdad())) + ",");
-                            bw.newLine();
+                        bw.write(INDENTACION3 + "{");
+                        bw.newLine();
+                        // id como string (fiel al tratamiento original de atributos en XML)
+                        bw.write(INDENTACION4 + "\"dni\": \"" + escapeJson(cliente.getDNI()) + "\",");
+                        bw.newLine();
+                        bw.write(INDENTACION4 + "\"nombre\": \"" + escapeJson(cliente.getNombre()) + "\",");
+                        bw.newLine();
+                        bw.write(INDENTACION4 + "\"NCuenta\": \"" + escapeJson(cliente.getnCuenta()) + "\",");
+                        bw.newLine();
+                        //bw.write(INDENTACION4 + "\"edad\": " + escapeJson(String.valueOf(cliente.getEdad())) + ",");
+                        //bw.newLine();
 
-                            // nota como número formateado a 1 decimal (sin comillas)
+                        // nota como número formateado a 1 decimal (sin comillas)
 
-                            bw.write(INDENTACION4 + "\"nota\": " + String.format("%.1f", e.getNota()).replace(",", "."));
-                            bw.newLine();
-                            bw.write(INDENTACION3 + "}" + (i < estudiantes.size() - 1 ? "," : "")); // se encarga de cerrar el objeto JSON correspondiente a un estudiante y, dependiendo de si es el último estudiante de la lista o no, agrega una coma al final.
-                            bw.newLine();
-                        }
+                        //bw.write(INDENTACION4 + "\"nota\": " + String.format("%.1f", e.getNota()).replace(",", "."));
+                        //bw.newLine();
+                        bw.write(INDENTACION3 + "}" ); // se encarga de cerrar el objeto JSON correspondiente a un estudiante y, dependiendo de si es el último estudiante de la lista o no, agrega una coma al final.
+                        bw.newLine();
+                        //}
 
                         bw.write(INDENTACION2 + "],");
                         bw.newLine();
 
+
+                        // lista dde movimientos
+
+
+                        bw.write(INDENTACION2 + "\"" + NODOHIJO2 + "\": [");
+                        bw.newLine();
+
+                        for (int i = 0; i < movimientos.size(); i++) {
+                            Movimiento movimiento = movimientos.get(i);
+
+
+                            bw.write(INDENTACION3 + "{");
+                            bw.newLine();
+
+                            bw.write(INDENTACION4 + "\"cantidad\": \"" + movimiento.getCantidad() + "\",");
+                            bw.newLine();
+                            // id como string (fiel al tratamiento original de atributos en XML)
+                            bw.write(INDENTACION4 + "\"tipo\": \"" + escapeJson(movimiento.getTipo()) + "\",");
+                            bw.newLine();
+                            bw.write(INDENTACION4 + "\"concepto\":\"" + escapeJson(movimiento.getConcepto()) + "\"");
+                            bw.newLine();
+
+
+                            bw.write(INDENTACION3 + "}" + (i < movimientos.size() - 1 ? "," : "")); // se encarga de cerrar el objeto JSON correspondiente a un movimiento y, dependiendo de si es el último movimiento de la lista o no, agrega una coma al final.
+                            bw.newLine();
+                        }
+
+                        bw.write(INDENTACION2 + "]");
+                        bw.newLine();
+
+
+
+
+                        /*
                         // Resumen de notas
                         bw.write(INDENTACION2 + "\"resumen\": {");
                         bw.newLine();
@@ -165,6 +215,8 @@ public class ExportarJSON {
                         bw.write(INDENTACION2 + "}");
                         bw.newLine();
 
+
+                         */
                         bw.write(INDENTACION + "}");
                         bw.newLine();
                         bw.write("}");

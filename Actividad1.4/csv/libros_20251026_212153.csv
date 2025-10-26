@@ -1,0 +1,37 @@
+# BIBLIOTECA MUNICIPAL - CATÁLOGO DE LIBROS
+
+# CATEGORÍA: Clásico
+
+ISBN;Título;Autor;Año;Páginas;Disponible;Préstamos
+978-84-123456-1;Don Quijote de la Mancha;Miguel de Cervantes;1605;863;true;150
+
+# Subtotal Clásico: 1 libros, 150 préstamos
+
+# CATEGORÍA: Distopía
+
+ISBN;Título;Autor;Año;Páginas;Disponible;Préstamos
+978-84-123456-3;1984;George Orwell;1949;328;true;120
+
+# Subtotal Distopía: 1 libros, 120 préstamos
+
+# CATEGORÍA: Fantasía
+
+ISBN;Título;Autor;Año;Páginas;Disponible;Préstamos
+978-84-123456-5;Harry Potter y la Piedra Filosofal;J.K. Rowling;1997;223;true;500
+
+# Subtotal Fantasía: 1 libros, 500 préstamos
+
+# CATEGORÍA: Ficción
+
+ISBN;Título;Autor;Año;Páginas;Disponible;Préstamos
+978-84-123456-2;Cien Años de Soledad;Gabriel García Márquez;1967;471;false;200
+
+# Subtotal Ficción: 1 libros, 200 préstamos
+
+# CATEGORÍA: Épica
+
+ISBN;Título;Autor;Año;Páginas;Disponible;Préstamos
+978-84-123456-4;La Odisea;Homero;-800;350;true;90
+
+# Subtotal Épica: 1 libros, 90 préstamos
+

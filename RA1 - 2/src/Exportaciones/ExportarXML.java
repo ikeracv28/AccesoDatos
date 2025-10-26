@@ -1,14 +1,22 @@
+package Exportaciones;
+
+import POJOS.Cliente;
+import POJOS.Cuenta;
+import POJOS.Movimiento;
+
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExportarXML {
     // Ruta del archivo XML
     static String fecha;
-    private static final String ARCHIVO = "xml/estudiantes_";
-    private static final String NODOPADRE = "clase";
-    private static final String NODOHIJO = "estudiantes";
+    private static final String ARCHIVO = "XML/cuenta";
+    private static final String NODOPADRE = "cuenta";
+    private static final String NODOHIJO = "propietarios";
+    private static final String NODOHIJO2 = "mmovimientos";
 
 
     private static final String INDENTACION = "    ";
@@ -92,13 +100,13 @@ public class ExportarXML {
         return ARCHIVO + fecha + EXTENSION;
     }
 
-    public static void escribirXmlExacto(List<Estudiante> estudiantes) {
+    public static void escribirXmlExacto(Cuenta cuenta) {
         try {
 
 
             String nombreArchivo = crearNombreArchivo();
 
-            if (estudiantes == null || estudiantes.isEmpty()) {
+            if (cuenta == null ) {
                 System.out.println("ERROR: No hay productos para exportar.");
                 return;
             }
@@ -111,11 +119,12 @@ public class ExportarXML {
 
             if (crearCarpeta()) {
 
+               /*
                 double suma = estudiantes.stream().mapToDouble(Estudiante::getNota).sum();
                 double media = estudiantes.isEmpty() ? 0.0 : suma / estudiantes.size();
                 double maxima = estudiantes.stream().mapToDouble(Estudiante::getNota).max().orElse(0.0);
                 double minima = estudiantes.stream().mapToDouble(Estudiante::getNota).min().orElse(0.0);
-
+                */
 
                 File archivo;
                 archivo = new File(nombreArchivo);
@@ -131,39 +140,65 @@ public class ExportarXML {
                     bw.write("<" + NODOPADRE + ">");
                     bw.newLine();
 
+                    Cliente cliente = cuenta.getCliente();
+
+                    ArrayList<Movimiento> movimientos = cuenta.getMovimientos();
 
                     // Metadata
                     bw.write(INDENTACION + "<metadata>");
                     bw.newLine();
                     bw.write(INDENTACION2 + "<fecha>" + escapeXml(fecha) + "</fecha>");
                     bw.newLine();
-                    bw.write(INDENTACION2 + "<totalEstudiantes>" + estudiantes.size() + "</totalEstudiantes>");
+                    bw.write(INDENTACION2 + "<totalMovimientos>" + movimientos.size() + "</totalMovimientos>");
                     bw.newLine();
                     bw.write(INDENTACION + "</metadata>");
                     bw.newLine();
 
 
-                    // Lista de estudiantes
+                    // Lista de clientes
                     bw.write(INDENTACION + "<" + NODOHIJO + ">");
                     bw.newLine();
-                    for (Estudiante e : estudiantes) {
-                        bw.write(INDENTACION2 + "<estudiante id=\"" + escapeXml(String.valueOf(e.getId())) + "\">");
+                    //for (Estudiante e : estudiantes) {
+
+                        bw.write(INDENTACION2 + "<cliente>");
                         bw.newLine();
-                        bw.write(INDENTACION3 + "<nombre>" + escapeXml(e.getNombre()) + "</nombre>");
+                        bw.write(INDENTACION3 + "<nombre>" + escapeXml(cliente.getNombre()) + "</nombre>");
                         bw.newLine();
-                        bw.write(INDENTACION3 + "<apellidos>" + escapeXml(e.getApellido()) + "</apellidos>");
+                        bw.write(INDENTACION3 + "<dni>" + escapeXml(cliente.getDNI()) + "</dni>");
                         bw.newLine();
-                        bw.write(INDENTACION3 + "<edad>" + e.getEdad() + "</edad>");
+                        bw.write(INDENTACION3 + "<Ncuenta>" + cliente.getnCuenta() + "</Ncuenta>");
                         bw.newLine();                                  // Decimales a mostrar
-                        bw.write(INDENTACION3 + "<nota>" + String.format("%.1f", e.getNota()) + "</nota>");
+                        //bw.write(INDENTACION3 + "<saldo>" + String.format("%.1f", cliente.get()) + "</saldo>");
+                        //bw.newLine();
+                        bw.write(INDENTACION2 + "</cliente>");
                         bw.newLine();
-                        bw.write(INDENTACION2 + "</estudiante>");
-                        bw.newLine();
-                    }
+                    //}
                     bw.write(INDENTACION + "</" + NODOHIJO + ">");
                     bw.newLine();
 
 
+                    // SE COPIA ESTO HASTA SIGUIENTE COMENTARIO
+
+
+                    bw.write(INDENTACION + "<" + NODOHIJO2 + ">");
+                    bw.newLine();
+                    for (Movimiento movimiento : movimientos) {
+                        bw.write(INDENTACION2 + "<Movimiento>");
+                        bw.newLine();
+                        bw.write(INDENTACION3 + "<Cantidad>" + movimiento.getCantidad() + "</Cantidad>");
+                        bw.newLine();
+                        bw.write(INDENTACION3 + "<Tipo>" + escapeXml(movimiento.getTipo())+ "</Tipo>");
+                        bw.newLine();
+                        bw.write(INDENTACION3 + "<Concepto>" +escapeXml(movimiento.getConcepto()) + "</Concepto>");
+                        bw.newLine();
+                        bw.write(INDENTACION2 + "</Movimiento>");
+                        bw.newLine();
+                    }
+                    bw.write(INDENTACION + "</" + NODOHIJO2 + ">");
+                    bw.newLine();
+                    // SE COPIA HASTA AQUI
+
+                    /*
                     // Resumen de notas
                     bw.write(INDENTACION + "<resumen>");
                     bw.newLine();
@@ -175,10 +210,13 @@ public class ExportarXML {
                     bw.newLine();
                     bw.write(INDENTACION + "</resumen>");
                     bw.newLine();
+                    */
 
                     bw.write("</" + NODOPADRE + ">");
                     bw.newLine();
                     bw.close();
+
+
                 } else {
                     System.out.println("El archivo no se ha podido crear");
                 }
@@ -192,88 +230,3 @@ public class ExportarXML {
         }
     }
 }
-
-
-/* forma de la que lo he hecho yo manulmente, una vez hecho, le he pregvuntado a cht como hago par no
-tener que ir escribiendo yo los alumnos uno a uno, si no darle una lista y que me los añada
-        try{
-            // Estructura básica para escribir CSV
-            BufferedWriter writer = new BufferedWriter(new FileWriter("datos/estudiantes.xml", true));
-
-            // Declaración XML
-            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            writer.newLine();
-
-            // Elemento raíz
-            writer.write("<clase>");
-            writer.newLine();
-
-
-            // metadata
-            writer.write("<metadata>");
-            writer.newLine();
-
-            // elemntos metadata
-            writer.write("  <fecha>19/10/2025</fecha>");
-            writer.newLine();
-            writer.write("  <totalEstudiantes>5</totalEstudiantes>");
-            writer.newLine();
-
-            writer.write("</metadata>");
-            writer.newLine();
-
-
-            // metadata
-            writer.write("<estudiantes>");
-            writer.newLine();
-
-            // elemntos hijos
-            writer.write("  <estudiante id=\"1\">");
-            writer.newLine();
-            writer.write("  <nombre>Juan</nombre>");
-            writer.newLine();
-            writer.write("  <apellidos>García López</apellidos>");
-            writer.newLine();
-            writer.write("  <edad>20</edad>");
-            writer.newLine();
-            writer.write("  <nota>8.5</nota>");
-            writer.newLine();
-            writer.write("  </estudiante>");
-            writer.newLine();
-
-            writer.write("</estudiantes>");
-            writer.newLine();
-
-
-            // metadata
-            writer.write("<estudiantes>");
-            writer.newLine();
-
-            // elemntos hijos
-            writer.write("  <resumen>");
-            writer.newLine();
-            writer.write("  <notaMedia>8.18</notaMedia>");
-            writer.newLine();
-            writer.write("  <notaMaxima>9.2</notaMaxima>");
-            writer.newLine();
-            writer.write("  <notaMinima>6.5</notaMinima>");
-            writer.newLine();
-            writer.write("  </resumen>");
-            writer.newLine();
-
-            writer.write("</estudiantes>");
-            writer.newLine();
-
-            // Cierre elemento raíz
-            writer.write("</clase>");
-            writer.newLine();
-
-            writer.close();
-        }catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-
-    }
-}
-*/
-

@@ -1,0 +1,27 @@
+{
+    "cuenta": {
+        "metadata": {
+            "fecha": "20251026_215558",
+            "totalMovimientos": 2
+        },
+        "propietarios": [
+            {
+                "dni": "111",
+                "nombre": "iker",
+                "NCuenta": "222",
+            }
+        ],
+        "movimientos": [
+            {
+                "cantidad": "1000.0",
+                "tipo": "Ingreso",
+                "concepto":"hola"
+            },
+            {
+                "cantidad": "-200.0",
+                "tipo": "Retirada",
+                "concepto":"adios"
+            }
+        ]
+    }
+}

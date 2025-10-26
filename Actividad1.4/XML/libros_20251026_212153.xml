@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<biblioteca>
+    <metadata>
+        <fecha>20251026_212153</fecha>
+        <totalLibros>5</totalLibros>
+        <totalCategorias>5</totalCategorias>
+    </metadata>
+
+    <categorias>
+        <categoria nombre="Clásico" totalLibros="1" totalPrestamos="150">
+            <libro isbn="978-84-123456-1" disponible="true">
+                <titulo>Don Quijote de la Mancha</titulo>
+                <autor>Miguel de Cervantes</autor>
+                <anio>1605</anio>
+                <paginas>863</paginas>
+                <prestamos>150</prestamos>
+            </libro>
+        </categoria>
+
+        <categoria nombre="Distopía" totalLibros="1" totalPrestamos="120">
+            <libro isbn="978-84-123456-3" disponible="true">
+                <titulo>1984</titulo>
+                <autor>George Orwell</autor>
+                <anio>1949</anio>
+                <paginas>328</paginas>
+                <prestamos>120</prestamos>
+            </libro>
+        </categoria>
+
+        <categoria nombre="Fantasía" totalLibros="1" totalPrestamos="500">
+            <libro isbn="978-84-123456-5" disponible="true">
+                <titulo>Harry Potter y la Piedra Filosofal</titulo>
+                <autor>J.K. Rowling</autor>
+                <anio>1997</anio>
+                <paginas>223</paginas>
+                <prestamos>500</prestamos>
+            </libro>
+        </categoria>
+
+        <categoria nombre="Ficción" totalLibros="1" totalPrestamos="200">
+            <libro isbn="978-84-123456-2" disponible="false">
+                <titulo>Cien Años de Soledad</titulo>
+                <autor>Gabriel García Márquez</autor>
+                <anio>1967</anio>
+                <paginas>471</paginas>
+                <prestamos>200</prestamos>
+            </libro>
+        </categoria>
+
+        <categoria nombre="Épica" totalLibros="1" totalPrestamos="90">
+            <libro isbn="978-84-123456-4" disponible="true">
+                <titulo>La Odisea</titulo>
+                <autor>Homero</autor>
+                <anio>-800</anio>
+                <paginas>350</paginas>
+                <prestamos>90</prestamos>
+            </libro>
+        </categoria>
+
+    </categorias>
+</biblioteca>
