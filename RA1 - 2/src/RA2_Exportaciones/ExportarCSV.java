@@ -1,20 +1,19 @@
-package Exportaciones;
+package RA2_Exportaciones;
 
-import POJOS.Cliente;
-import POJOS.Cuenta;
-import POJOS.Movimiento;
+import ClasesRA1.Cliente;
+import ClasesRA1.Cuenta;
+import ClasesRA1.Movimiento;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class ExportarCSV {
 
     final String archivo = "csv/cuenta";
-
+    static Cuenta cuenta = null ;
     private static final String separador = ";";
     private static final String CARPETA = "csv"; // NOMBRE CARPETA
 
@@ -106,13 +105,14 @@ public class ExportarCSV {
                 System.out.println(e.getMessage());
             }
         }
-
+        System.out.println("El archivo se generara cuando cierres el programa");
 
     }
 
     // Escribe el Resumen de los movimientos
     private static void escribirResumen(BufferedWriter writer, ArrayList<Movimiento> movimientos) throws IOException {
         // Cálculos
+
         double totalGastado = 0;
         double totalIngresado = 0;
         for (Movimiento mov : movimientos) {
@@ -122,6 +122,7 @@ public class ExportarCSV {
                 totalGastado -= mov.getCantidad();
             }
         }
+
 
         writer.newLine(); // Línea en blanco (Para separar el resumen de los elementos de arriba)
 

@@ -1,8 +1,8 @@
-package Exportaciones;
+package RA2_Exportaciones;
 
-import POJOS.Cliente;
-import POJOS.Cuenta;
-import POJOS.Movimiento;
+import ClasesRA1.Cliente;
+import ClasesRA1.Cuenta;
+import ClasesRA1.Movimiento;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,7 +13,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ExportarJson {
     // Ruta del archivo JSON
@@ -155,6 +154,8 @@ public class ExportarJson {
                         bw.newLine();
                         bw.write(INDENTACION4 + "\"NCuenta\": \"" + escapeJson(cliente.getnCuenta()) + "\",");
                         bw.newLine();
+                        bw.write(INDENTACION4 + "\"saldo\": \"" + cuenta.getSaldo() + "\"");
+                        bw.newLine();
                         //bw.write(INDENTACION4 + "\"edad\": " + escapeJson(String.valueOf(cliente.getEdad())) + ",");
                         //bw.newLine();
 
@@ -201,27 +202,13 @@ public class ExportarJson {
 
 
 
-
-                        /*
-                        // Resumen de notas
-                        bw.write(INDENTACION2 + "\"resumen\": {");
-                        bw.newLine();
-                        bw.write(INDENTACION3 + "\"notaMedia\": " + String.format("%.2f", media).replace(",", ".") + ",");
-                        bw.newLine();
-                        bw.write(INDENTACION3 + "\"notaMaxima\": " + String.format("%.1f", maxima).replace(",", ".") + ",");
-                        bw.newLine();
-                        bw.write(INDENTACION3 + "\"notaMinima\": " + String.format("%.1f", minima).replace(",", "."));
-                        bw.newLine();
-                        bw.write(INDENTACION2 + "}");
-                        bw.newLine();
-
-
-                         */
                         bw.write(INDENTACION + "}");
                         bw.newLine();
                         bw.write("}");
                     }
-                } else {
+                    System.out.println("El archivo se generara cuando cierres el programa");
+                }
+                else {
                     System.out.println("El archivo no se ha podido crear");
                 }
             } else {

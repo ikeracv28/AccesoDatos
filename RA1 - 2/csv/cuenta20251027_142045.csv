@@ -1,0 +1,12 @@
+Nombre;DNI;NumeroCuenta;Saldo
+iker;4999;ES123;9900.0
+
+
+Cantidad;Tipo;Concepto
+10000.0;Ingreso;Ingreso;
+-100.0;Retirada;comida;
+
+# RESUMEN MOVIMIENTOS
+# Total movimientos;2
+# Total gastos;100,00
+# Total ingresos;10000,00

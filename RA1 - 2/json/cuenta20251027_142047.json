@@ -1,26 +1,27 @@
 {
     "cuenta": {
         "metadata": {
-            "fecha": "20251026_215558",
+            "fecha": "20251027_142047",
             "totalMovimientos": 2
         },
         "propietarios": [
             {
-                "dni": "111",
+                "dni": "4999",
                 "nombre": "iker",
-                "NCuenta": "222",
+                "NCuenta": "ES123",
+                "saldo": "9900.0"
             }
         ],
         "movimientos": [
             {
-                "cantidad": "1000.0",
+                "cantidad": "10000.0",
                 "tipo": "Ingreso",
-                "concepto":"hola"
+                "concepto":"Ingreso"
             },
             {
-                "cantidad": "-200.0",
+                "cantidad": "-100.0",
                 "tipo": "Retirada",
-                "concepto":"adios"
+                "concepto":"comida"
             }
         ]
     }

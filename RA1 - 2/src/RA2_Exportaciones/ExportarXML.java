@@ -1,14 +1,13 @@
-package Exportaciones;
+package RA2_Exportaciones;
 
-import POJOS.Cliente;
-import POJOS.Cuenta;
-import POJOS.Movimiento;
+import ClasesRA1.Cliente;
+import ClasesRA1.Cuenta;
+import ClasesRA1.Movimiento;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ExportarXML {
     // Ruta del archivo XML
@@ -16,7 +15,7 @@ public class ExportarXML {
     private static final String ARCHIVO = "XML/cuenta";
     private static final String NODOPADRE = "cuenta";
     private static final String NODOHIJO = "propietarios";
-    private static final String NODOHIJO2 = "mmovimientos";
+    private static final String NODOHIJO2 = "movimientos";
 
 
     private static final String INDENTACION = "    ";
@@ -167,7 +166,10 @@ public class ExportarXML {
                         bw.write(INDENTACION3 + "<dni>" + escapeXml(cliente.getDNI()) + "</dni>");
                         bw.newLine();
                         bw.write(INDENTACION3 + "<Ncuenta>" + cliente.getnCuenta() + "</Ncuenta>");
-                        bw.newLine();                                  // Decimales a mostrar
+                        bw.newLine();
+                        bw.write(INDENTACION3 + "<saldo>" + cuenta.getSaldo() + "</saldo>");
+                        bw.newLine();
+                        // Decimales a mostrar
                         //bw.write(INDENTACION3 + "<saldo>" + String.format("%.1f", cliente.get()) + "</saldo>");
                         //bw.newLine();
                         bw.write(INDENTACION2 + "</cliente>");
@@ -196,21 +198,7 @@ public class ExportarXML {
                     }
                     bw.write(INDENTACION + "</" + NODOHIJO2 + ">");
                     bw.newLine();
-                    // SE COPIA HASTA AQUI
 
-                    /*
-                    // Resumen de notas
-                    bw.write(INDENTACION + "<resumen>");
-                    bw.newLine();
-                    bw.write(INDENTACION2 + "<notaMedia>" + String.format("%.2f", media) + "</notaMedia>");
-                    bw.newLine();
-                    bw.write(INDENTACION2 + "<notaMaxima>" + String.format("%.1f", maxima) + "</notaMaxima>");
-                    bw.newLine();
-                    bw.write(INDENTACION2 + "<notaMinima>" + String.format("%.1f", minima) + "</notaMinima>");
-                    bw.newLine();
-                    bw.write(INDENTACION + "</resumen>");
-                    bw.newLine();
-                    */
 
                     bw.write("</" + NODOPADRE + ">");
                     bw.newLine();
@@ -222,6 +210,7 @@ public class ExportarXML {
                 }
 
             }
+            System.out.println("El archivo se generara cuando cierres el programa");
 
 
         } catch (IOException e) {

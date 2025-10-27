@@ -1,15 +1,15 @@
-import Exportaciones.ExportarCSV;
-import Exportaciones.ExportarJson;
-import Exportaciones.ExportarXML;
-import POJOS.Cliente;
-import POJOS.Cuenta;
+import RA2_Exportaciones.ExportarCSV;
+import RA2_Exportaciones.ExportarJson;
+import RA2_Exportaciones.ExportarXML;
+import ClasesRA1.Cliente;
+import ClasesRA1.Cuenta;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-import static Exportaciones.ExportarJson.escribirJsonExacto;
-import static Exportaciones.ExportarXML.escribirXmlExacto;
+import static RA2_Exportaciones.ExportarJson.escribirJsonExacto;
+import static RA2_Exportaciones.ExportarXML.escribirXmlExacto;
 
 public class Main {
     public static void main(String args[]) {
@@ -93,8 +93,7 @@ public class Main {
 
         try {
             if (cuenta == null || cuenta.getCliente() == null) {
-                System.out.println("No se ha encontrado un cliente en la cuenta o la cuenta está vacía.");
-                System.out.println("Dime un nombre para la cuenta: ");
+                System.out.println("Dime un nombre: ");
                 String nombre = sc.nextLine();
                 System.out.println("Dime un DNI para la cuenta: ");
                 String dni = sc.nextLine();

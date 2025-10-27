@@ -1,4 +1,4 @@
-package POJOS;
+package ClasesRA1;
 
 import java.io.Serializable;
 

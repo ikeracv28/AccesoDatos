@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cuenta>
     <metadata>
-        <fecha>20251026_215557</fecha>
+        <fecha>20251027_142046</fecha>
         <totalMovimientos>2</totalMovimientos>
     </metadata>
     <propietarios>
         <cliente>
             <nombre>iker</nombre>
-            <dni>111</dni>
-            <Ncuenta>222</Ncuenta>
+            <dni>4999</dni>
+            <Ncuenta>ES123</Ncuenta>
+            <saldo>9900.0</saldo>
         </cliente>
     </propietarios>
-    <mmovimientos>
+    <movimientos>
         <Movimiento>
-            <Cantidad>1000.0</Cantidad>
+            <Cantidad>10000.0</Cantidad>
             <Tipo>Ingreso</Tipo>
-            <Concepto>hola</Concepto>
+            <Concepto>Ingreso</Concepto>
         </Movimiento>
         <Movimiento>
-            <Cantidad>-200.0</Cantidad>
+            <Cantidad>-100.0</Cantidad>
             <Tipo>Retirada</Tipo>
-            <Concepto>adios</Concepto>
+            <Concepto>comida</Concepto>
         </Movimiento>
-    </mmovimientos>
+    </movimientos>
 </cuenta>

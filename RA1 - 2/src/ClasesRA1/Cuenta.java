@@ -1,4 +1,4 @@
-package POJOS;
+package ClasesRA1;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -78,7 +78,6 @@ public class Cuenta implements Serializable {
             if (dineroIngresar > 0) {
                 System.out.println("Dime el concepto: ");
                 String concepto = sc.nextLine();
-                sc.nextLine();
                 movimientos.add(new Movimiento("Ingreso", dineroIngresar, concepto));
                 saldo += dineroIngresar;
             } else {
@@ -169,7 +168,7 @@ public class Cuenta implements Serializable {
             System.out.println("Cuenta cargada correctamente con cliente: " + cuentaCargada.getCliente().getNombre());
             return cuentaCargada;
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error al cargar la cuenta: " + e.getMessage());
+            System.out.println("No se ha encontrado ninguna cuenta registrada.");
             return new Cuenta();
         }
     }
