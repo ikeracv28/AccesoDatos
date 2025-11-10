@@ -70,6 +70,4 @@ public class ConsultasSQL {
     }catch (SQLException e){
         throw new RuntimeException(e);}
     }
-
-
 }

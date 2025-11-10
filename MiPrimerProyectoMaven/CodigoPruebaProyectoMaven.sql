@@ -1,3 +1,4 @@
+drop database if exists empresaMaven;
 CREATE DATABASE IF NOT EXISTS empresaMaven;
 USE empresaMaven;
 
@@ -7,8 +8,11 @@ CREATE TABLE empleados (
     salario DOUBLE
 );
 
-INSERT INTO empleados (nombre, salario)
-VALUES ('Ana', 25000), ('Luis', 28000), ('Marta', 32000);
+INSERT INTO empleados (nombre, salario) VALUES 
+('Ana', 1500.00), 
+('Luis', 1800.00), 
+('Marta', 2000.00), 
+('Pedro', 1750.00); 
 
 DELIMITER //
 CREATE PROCEDURE obtener_empleado(IN empId INT)
