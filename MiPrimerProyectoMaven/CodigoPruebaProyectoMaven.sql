@@ -20,6 +20,8 @@ create table proyectos (
     presupuesto decimal(10,2)
 );
 
+SELECT * FROM proyectos;
+
 
 DELIMITER //
 CREATE PROCEDURE obtener_empleado(IN empId INT)
