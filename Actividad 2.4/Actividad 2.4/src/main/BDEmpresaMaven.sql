@@ -21,8 +21,9 @@ create table proyectos (
 );
 
 SELECT * FROM proyectos;
+SELECT * FROM empleados;
 
-
+SHOW CREATE PROCEDURE incrementar_salario\G
 DELIMITER //
 CREATE PROCEDURE incrementar_salario(IN empId INT, IN incremento DOUBLE, OUT nuevoSalario DOUBLE)
 BEGIN
@@ -33,6 +34,8 @@ BEGIN
     select salario into nuevoSalario from empleados where id = empId;
 END //
 DELIMITER ;
+
+SHOW CREATE PROCEDURE incrementar_salario\G
 
 
 
