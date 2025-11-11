@@ -14,6 +14,13 @@ INSERT INTO empleados (nombre, salario) VALUES
 ('Marta', 2000.00), 
 ('Pedro', 1750.00); 
 
+create table proyectos ( 
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50),
+    presupuesto decimal(10,2)
+);
+
+
 DELIMITER //
 CREATE PROCEDURE obtener_empleado(IN empId INT)
 BEGIN
