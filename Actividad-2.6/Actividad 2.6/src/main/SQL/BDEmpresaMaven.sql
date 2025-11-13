@@ -20,27 +20,7 @@ create table proyectos (
     presupuesto decimal(10,2)
 );
 
-
-CREATE TABLE cuentas (
-id INT AUTO_INCREMENT PRIMARY KEY,
-titular VARCHAR(100),
-saldo DECIMAL(10,2)
-);
-
-create table logs(
-tipo varchar(50),
-descripcion varchar(50),
-fecha datetime
-);
-
-INSERT INTO cuentas (titular, saldo) VALUES
-('Ana', 2000.00),
-('Luis', 1500.00);
-
 SELECT * FROM proyectos;
-SELECT * FROM empleados;
-SELECT * FROM cuentas;
-SELECT * FROM logs;
 
 
 DELIMITER //
@@ -53,8 +33,6 @@ BEGIN
     select salario into nuevoSalario from empleados where id = empId;
 END //
 DELIMITER ;
-
-
 
 
 
