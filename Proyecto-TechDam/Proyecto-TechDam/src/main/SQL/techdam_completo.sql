@@ -150,6 +150,22 @@ BEGIN
     END IF;
 END$$
 
+DELIMITER $$
+
+CREATE PROCEDURE asignarEmpleadoAProyecto(
+    IN p_id_empleado INT,
+    IN p_id_proyecto INT,
+    IN p_fecha_asignacion DATE
+)
+BEGIN
+    -- Insertamos la asignación en la tabla 'asignaciones'
+INSERT INTO asignaciones (id_empleado, id_proyecto, fecha_asignacion)
+VALUES (p_id_empleado, p_id_proyecto, p_fecha_asignacion);
+END$$
+
+DELIMITER ;
+
+
 -- ==========================================
 -- FUNCIÓN ALMACENADA
 -- calcular_coste_proyecto:

@@ -44,7 +44,7 @@ public class Proyecto {
 
     @Override
     public String toString() {
-        return "ProyectoDAO{" +
+        return "Proyecto{" +
                 "idProyecto=" + idProyecto +
                 ", nombre='" + nombre + '\'' +
                 ", presupuesto=" + presupuesto +
