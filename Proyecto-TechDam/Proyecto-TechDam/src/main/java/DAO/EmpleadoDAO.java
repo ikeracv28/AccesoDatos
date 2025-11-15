@@ -109,6 +109,7 @@ public class EmpleadoDAO {
     public void mostrarEmpleados() {
         try (Connection con = getConexion()) {
             if (con != null) {
+                obtenerEmpleados();
                 for (Empleado empleado : listaEmpleado) {
                     System.out.println(empleado);
                 }

@@ -150,7 +150,6 @@ BEGIN
     END IF;
 END$$
 
-DELIMITER $$
 
 CREATE PROCEDURE asignarEmpleadoAProyecto(
     IN p_id_empleado INT,
@@ -164,7 +163,6 @@ VALUES (p_id_empleado, p_id_proyecto, p_fecha_asignacion);
 END$$
 
 DELIMITER ;
-
 
 -- ==========================================
 -- FUNCIÓN ALMACENADA
@@ -194,7 +192,7 @@ DELIMITER ;
 -- CONSULTAS DE PRUEBA (opcional)
 -- ==========================================
 
--- SELECT * FROM empleados;
+SELECT * FROM empleados;
 SELECT * FROM proyectos;
 -- SELECT * FROM asignaciones;
 -- SET @n = 0; CALL actualizar_salario_departamento('Desarrollo', 5.0, @n); SELECT @n;

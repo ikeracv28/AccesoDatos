@@ -110,6 +110,7 @@ public class ProyectoDAO {
     public void mostrarProyectos() {
         try (Connection con = getConexion()) {
             if (con != null) {
+                obtenerProyectos();
                 for(Proyecto proyecto : listaProyecto){
                     System.out.println(proyecto);
                 }
