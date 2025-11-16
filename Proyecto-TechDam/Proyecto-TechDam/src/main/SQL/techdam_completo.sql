@@ -7,13 +7,8 @@ CREATE DATABASE techdam;
 
 USE techdam;
 
--- ==========================================
+
 -- TABLA EMPLEADOS
--- Necesario para:
---  - CRUD Empleados
---  - actualizar_salario_departamento
---  - calcular_coste_proyecto (salario)
--- ==========================================
 CREATE TABLE empleados (
     id_empleado   INT AUTO_INCREMENT PRIMARY KEY,
     nombre        VARCHAR(100)   NOT NULL,
@@ -27,30 +22,22 @@ CREATE INDEX idx_empleados_departamento
 CREATE INDEX idx_empleados_activo
     ON empleados (activo);
 
--- ==========================================
+
 -- TABLA PROYECTOS
--- Necesario para:
---  - CRUD Proyectos
---  - transacciones sobre presupuesto
---  - asignaciones (relación con empleados)
--- ==========================================
 CREATE TABLE proyectos (
     id_proyecto   INT AUTO_INCREMENT PRIMARY KEY,
     nombre        VARCHAR(100)   NOT NULL,
     presupuesto   DECIMAL(12,2)  NOT NULL
 );
 
--- ==========================================
+
 -- TABLA ASIGNACIONES
--- Necesario para:
---  - Relación N:M Empleados–Proyectos
---  - calcular_coste_proyecto (horas_asignadas)
--- ==========================================
 CREATE TABLE asignaciones (
     id_asignacion   INT AUTO_INCREMENT PRIMARY KEY,
     id_empleado     INT           NOT NULL,
     id_proyecto     INT           NOT NULL,
     horas_asignadas DECIMAL(8,2)  NOT NULL DEFAULT 0,
+    fecha_asignacion DATE         NOT NULL,
 
     CONSTRAINT fk_asig_empleado
         FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado)
@@ -86,14 +73,15 @@ INSERT INTO proyectos (nombre, presupuesto) VALUES
 ('Migración Servidores', 60000.00),
 ('Portal Empleado',      45000.00);
 
-INSERT INTO asignaciones (id_empleado, id_proyecto, horas_asignadas) VALUES
-(1, 1, 120.0),
-(2, 1,  80.0),
-(2, 2, 150.0),
-(3, 3,  90.0),
-(4, 4, 110.0),
-(1, 5,  60.0),
-(5, 5,  40.0);
+INSERT INTO asignaciones (id_empleado, id_proyecto, horas_asignadas, fecha_asignacion) VALUES
+(1, 1, 120.0, '2023-11-15'),
+(2, 1,  80.0, '2023-11-15'),
+(2, 2, 150.0, '2023-11-15'),
+(3, 3,  90.0, '2023-11-15'),
+(4, 4, 110.0, '2023-11-15'),
+(1, 5,  60.0, '2023-11-15'),
+(5, 5,  40.0, '2023-11-15');
+
 
 -- ==========================================
 -- PROCEDIMIENTOS ALMACENADOS
@@ -170,6 +158,8 @@ DELIMITER ;
 --   SUM( horas_asignadas * (salario/1600) )
 -- ==========================================
 
+DELIMITER $$
+
 CREATE FUNCTION calcular_coste_proyecto(p_id_proyecto INT)
 RETURNS DECIMAL(14,2)
 DETERMINISTIC
@@ -188,13 +178,14 @@ END$$
 
 DELIMITER ;
 
+
 -- ==========================================
 -- CONSULTAS DE PRUEBA (opcional)
 -- ==========================================
 
 SELECT * FROM empleados;
 SELECT * FROM proyectos;
--- SELECT * FROM asignaciones;
+SELECT * FROM asignaciones;
 -- SET @n = 0; CALL actualizar_salario_departamento('Desarrollo', 5.0, @n); SELECT @n;
 -- SET @ok = FALSE; CALL transferir_presupuesto(1, 2, 1000.00, @ok); SELECT @ok;
 -- SELECT calcular_coste_proyecto(1);

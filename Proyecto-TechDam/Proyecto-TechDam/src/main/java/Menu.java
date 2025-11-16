@@ -40,7 +40,7 @@ public class Menu {
             System.out.println("\n=== Menú Principal ===");
             System.out.println("1. Menú Empleados");
             System.out.println("2. Menú Proyectos");
-            System.out.println("3. Operaciones Administrativas");
+            System.out.println("3. Transacciones y Procedimientos");
             System.out.println("4. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = leerEntero();
@@ -79,7 +79,7 @@ public class Menu {
 
         while (true) {
             // Menú de opciones de operaciones administrativas
-            System.out.println("\n=== Menú Operaciones Administrativas ===");
+            System.out.println("\n=== Menú de Procedimientos y Funciones ===");
             System.out.println("1. Actualizar Salarios por Departamento");
             System.out.println("2. Transferir Presupuesto entre Proyectos");
             System.out.println("3. Asignar Empleados a Proyectos");
@@ -124,6 +124,7 @@ public class Menu {
         // Llamamos al servicio con los parámetros correctos
         int empleadosActualizados = procedimientoService.actualizarSalarioDepartamento(departamento, porcentaje);
         System.out.println(empleadosActualizados + " empleados actualizados.");
+        empleadoDAO.mostrarEmpleados();
     }
 
     // Método para asignar empleados a proyectos
@@ -161,6 +162,7 @@ public class Menu {
         System.out.print("Ingrese el monto a transferir: ");
         double monto = leerDouble();
         transaccionesService.transferirPresupuestoEntreProyectos(proyectoOrigen, proyectoDestino, monto);
+        proyectoDAO.mostrarProyectos();
     }
 
     // Submenú para Empleados
@@ -228,7 +230,8 @@ public class Menu {
             System.out.println("5. Obtener Proyecto por ID");
             System.out.println("6. Volver al Menú Principal");
             System.out.print("Seleccione una opción: ");
-            opcion = sc.nextInt();
+            opcion = leerEntero();
+
 
             switch (opcion) {
                 case 1:
@@ -264,9 +267,10 @@ public class Menu {
     // Método para pedir los datos del proyecto y devolver el objeto Proyecto
     public Proyecto crearProyecto() {
         System.out.print("Ingrese el nombre del proyecto: ");
-        String nombreProyecto = sc.next();
+        String nombreProyecto = sc.nextLine();
         System.out.print("Ingrese el presupuesto del proyecto: ");
         double presupuesto = leerDouble();
+
 
         Proyecto nuevoProyecto = new Proyecto();
         nuevoProyecto.setNombre(nombreProyecto);
@@ -278,9 +282,9 @@ public class Menu {
     // Método para pedir los datos del empleado y devolver el objeto Empleado
     public Empleado crearEmpleado() {
         System.out.print("Ingrese el nombre del empleado: ");
-        String nombreEmpleado = sc.next();
+        String nombreEmpleado = sc.nextLine();
         System.out.print("Ingrese el departamento del empleado: ");
-        String departamento = sc.next();
+        String departamento = sc.nextLine();
         System.out.print("Ingrese el salario del empleado: ");
         double salario = leerDouble();
 
@@ -295,7 +299,7 @@ public class Menu {
                 entradaValida = true;
             } else {
                 System.out.println("Entrada inválida. Por favor ingrese 'true' o 'false'.");
-                sc.next(); // Limpiar el buffer
+                sc.nextLine(); // Limpiar el buffer
             }
         }
 
@@ -323,6 +327,7 @@ public class Menu {
             double salario = leerDouble();
             System.out.print("Está activo el empleado? (true/false): ");
             boolean activo = sc.nextBoolean();
+            sc.nextLine();
 
             empleado.setNombre(nombre);
             empleado.setDepartamento(departamento);
@@ -362,12 +367,11 @@ public class Menu {
     public void actualizarProyecto() {
         System.out.print("Ingrese el ID del proyecto a actualizar: ");
         int idProyecto = leerEntero();
-        sc.nextLine();
         Proyecto proyecto = proyectoDAO.obtenerPorId(idProyecto).orElse(null);
         if (proyecto != null) {
             // Solicitar los nuevos datos del proyecto y actualizar
             System.out.print("Ingrese el nuevo nombre del proyecto: ");
-            String nombre = sc.next();
+            String nombre = sc.nextLine();
             System.out.print("Ingrese el nuevo presupuesto del proyecto: ");
             double presupuesto = leerDouble();
 

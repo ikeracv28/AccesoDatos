@@ -55,6 +55,7 @@ public class TransaccionesService {
 
     // Método para transferir presupuesto entre proyectos utilizando una transacción
     public void transferirPresupuestoEntreProyectos(int proyectoOrigen, int proyectoDestino, double monto) {
+        String sqlSelect = "SELECT presupuesto FROM proyectos WHERE id_proyecto = ?";
         String sqlRestar = "UPDATE proyectos SET presupuesto = presupuesto - ? WHERE id_proyecto = ?";
         String sqlSumar = "UPDATE proyectos SET presupuesto = presupuesto + ? WHERE id_proyecto = ?";
 
@@ -63,8 +64,28 @@ public class TransaccionesService {
                 // Desactivar auto-commit para manejar la transacción manualmente
                 con.setAutoCommit(false);
 
-                try (PreparedStatement psRestar = con.prepareStatement(sqlRestar);
+                try (PreparedStatement psSelect = con.prepareStatement(sqlSelect);
+                     PreparedStatement psRestar = con.prepareStatement(sqlRestar);
                      PreparedStatement psSumar = con.prepareStatement(sqlSumar)) {
+
+                    // Consultar presupuesto del proyecto de origen
+                    psSelect.setInt(1, proyectoOrigen);
+                    ResultSet rs = psSelect.executeQuery();
+
+                    if (!rs.next()) {
+                        System.out.println("Proyecto de origen no encontrado.");
+                        con.rollback();
+                        return;
+                    }
+
+                    double presupuestoOrigen = rs.getDouble("presupuesto");
+
+                    // Comprobar si tiene suficiente dinero
+                    if (presupuestoOrigen < monto) {
+                        System.out.println("No hay suficiente presupuesto en el proyecto de origen.");
+                        con.rollback();
+                        return;
+                    }
 
                     // Restar presupuesto del proyecto de origen
                     psRestar.setDouble(1, monto);
@@ -81,6 +102,7 @@ public class TransaccionesService {
                         // Si ambas operaciones fueron exitosas, confirmamos la transacción
                         con.commit();
                         System.out.println("Transferencia de presupuesto exitosa.");
+
                     } else {
                         // Si alguna operación falla, revertimos toda la transacción
                         con.rollback();

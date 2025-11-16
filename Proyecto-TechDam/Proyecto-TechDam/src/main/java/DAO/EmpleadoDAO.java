@@ -42,6 +42,7 @@ public class EmpleadoDAO {
                     }
 
                     System.out.println("Filas insertadas: " + filas);
+                    // para que nos devuleva el ID del empleado creado
                     System.out.println("ID del empleado creado: " + idGenerado);
                 }
             }
