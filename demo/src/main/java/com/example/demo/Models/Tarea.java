@@ -25,5 +25,10 @@ public class Tarea {
     @Column(name = "horas")
     private double horas;
 
+    public Tarea( int idEmpleado, int idProyecto, double horas) {
+        this.idEmpleado = idEmpleado;
+        this.idProyecto = idProyecto;
+        this.horas = horas;
+    }
 
 }

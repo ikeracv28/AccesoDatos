@@ -163,7 +163,9 @@ DELIMITER $$
 CREATE FUNCTION calcular_coste_proyecto(p_id_proyecto INT)
 RETURNS DECIMAL(14,2)
 DETERMINISTIC
-READS SQL DATA
+
+
+
 BEGIN
     DECLARE v_coste_total DECIMAL(14,2);
 

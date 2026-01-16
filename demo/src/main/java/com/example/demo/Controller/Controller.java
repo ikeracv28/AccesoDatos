@@ -39,6 +39,9 @@ public class Controller implements CommandLineRunner {
                 case 2:
                     consultarHorasPorEmpleado();
                     break;
+                case 3:
+                    registrarMasHorasTareas();
+                    break;
 
                 case 4:
                     System.out.println("¡A entrenar! Adiós.");
@@ -79,6 +82,26 @@ public class Controller implements CommandLineRunner {
 
     public void registrarMasHorasTareas(){
         Tarea tarea;
-        System.out.println();
+        System.out.println("Dime el id del empleado que quieras asignar una tarea: ");
+        int idEmpleado = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("A que proyecto");
+        int idProyecto = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Cuantas horas ha trabajado");
+        double horas = scanner.nextDouble();
+        scanner.nextLine();
+        tarea = new Tarea(idEmpleado, idProyecto, horas);
+        try{
+            if (tareaService.insertarTareas(tarea)){
+                System.out.println("tarea registrada con exito");
+            } else {
+                System.out.println("error al registrar la tarea");
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+
     }
 }
