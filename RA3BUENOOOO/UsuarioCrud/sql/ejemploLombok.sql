@@ -24,6 +24,15 @@ create table usuarioRol(
     FOREIGN KEY (idRol) references rol(idRol)
 );
 
-select * from usuario;
 
 INSERT INTO usuario ( username, password) values ('Iker','$2a$12$CzdU7n41SWsBnlPVerrdu.rAHZGeeYxXqkZYyyraM0YxrT6ry4b.2');
+INSERT INTO usuario ( username, password) values ('Rafa','$2a$12$CzdU7n41SWsBnlPVerrdu.rAHZGeeYxXqkZYyyraM0YxrT6ry4b.2');
+
+insert into rol (nombre) values ('admin');
+insert into rol (nombre) values ('user');
+
+insert into usuarioRol(id, idRol) values (1, 1);
+insert into usuarioRol(id, idRol) values (2, 2);
+
+select * from usuario;
+
