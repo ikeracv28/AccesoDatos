@@ -1,10 +1,7 @@
 package com.example.EjemploLombok.Modelo;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,13 +20,12 @@ public class Rol {
     @Column(name = "nombre", unique = true, length = 100, nullable = false)
     private String nombre;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "usuarioRol",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "idRol")
-    )
-    private Set<Rol> roles = new HashSet<>();
+
+    @ManyToMany( mappedBy = "roles")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Usuario> usuario = new HashSet<>();
+
 
 
 

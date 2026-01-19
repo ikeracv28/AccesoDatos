@@ -24,8 +24,13 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Deshabilitar protección CSRF para pruebas
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // Permitir entrar a todos lados sin login
+                        .requestMatchers("/", "/login", "/css/**", "/js/**").permitAll().anyRequest().permitAll() // Permitir entrar a todos lados sin login
+
                 );
         return http.build();
+
+
     }
+
+
 }

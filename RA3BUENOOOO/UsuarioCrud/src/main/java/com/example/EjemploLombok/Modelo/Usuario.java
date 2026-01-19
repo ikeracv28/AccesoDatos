@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data @AllArgsConstructor @NoArgsConstructor
@@ -33,6 +35,16 @@ public class Usuario {
 
     @Column(name = "fecha_actualizacion")
     private LocalDateTime fechaActualizacion;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuarioRol",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "idRol")
+    )
+    private Set<Rol> roles = new HashSet<>();
+
 
 // ========================================
 // CALLBACKS DEL CICLO DE VIDA

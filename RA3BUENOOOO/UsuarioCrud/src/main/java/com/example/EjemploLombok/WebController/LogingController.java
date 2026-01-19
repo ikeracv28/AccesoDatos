@@ -1,17 +1,56 @@
 package com.example.EjemploLombok.WebController;
 
+import com.example.EjemploLombok.DTO.LoginDTO;
+import com.example.EjemploLombok.DTO.UsuarioSesionDTO;
+import com.example.EjemploLombok.Modelo.Usuario;
+import com.example.EjemploLombok.Repository.UsuarioRepository;
+import com.example.EjemploLombok.Service.RolService;
+import com.example.EjemploLombok.Service.UsuarioService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
 public class LogingController {
 
-    @GetMapping
-    public String login(){
-        return "indexLogin";
+
+    @Autowired
+    UsuarioService usuarioService;
+
+    @Autowired
+    RolService rolService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity<UsuarioSesionDTO> inicioSesion(@RequestBody LoginDTO loginDTO, HttpSession session){
+        Optional<Usuario> usuarioOptional = usuarioService.buscarUsuario(loginDTO.getUsername());
+        if(usuarioOptional.isPresent()){
+            if (passwordEncoder.matches(loginDTO.getPassword(), usuarioOptional.get().getPassword())){
+                UsuarioSesionDTO infoUsuarioLogeado = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().toString());
+
+                session.setAttribute("usuarioLogeado", infoUsuarioLogeado);
+
+                return ResponseEntity.ok(infoUsuarioLogeado);
+
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+
+
+
 
 }
