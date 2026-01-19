@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.Scanner;
 @Component
 public class UsuarioController implements CommandLineRunner {
-    public static Scanner entrada = new Scanner(System.in);
+    public static Scanner scanner = new Scanner(System.in);
     private Usuario usuarioLogeado;
 
     @Autowired
@@ -45,7 +45,7 @@ public class UsuarioController implements CommandLineRunner {
                 System.out.println("0. Salir");
                 System.out.print("Elige una opción: ");
 
-                String opcion = entrada.nextLine();
+                String opcion = scanner.nextLine();
 
                 switch (opcion) {
                     case "1":
@@ -87,39 +87,57 @@ public class UsuarioController implements CommandLineRunner {
 
     public boolean iniciarSesion() {
         boolean logeado = false;
+
         while (!logeado) {
             System.out.println("Dime un username");
-            String username = entrada.nextLine();
+            String username = scanner.nextLine();
+
             try {
-                if (!usuarioService.comprobarUsername(username)) throw new IllegalStateException("El usuario no existe");
-                Optional <Usuario> usuario = usuarioService.buscarUsuario(username);
-                if (!usuario.get().isEstado()) throw new IllegalStateException("Cuenta bloqueada");
+                Optional<Usuario> optionalUsuario = usuarioService.buscarUsuario(username);
+
+                if (optionalUsuario.isEmpty()) {
+                    throw new IllegalStateException("El usuario no existe");
+                }
+
+                Usuario usuario = optionalUsuario.get();
+
+                if (!usuario.isEstado()) {
+                    throw new IllegalStateException("Cuenta bloqueada");
+                }
+
                 System.out.println("Dime la contraseña");
-                String password = entrada.nextLine();
-                if(usuarioService.comprobarInicioSesion(new Usuario(username,password))){
+                String password = scanner.nextLine();
+
+                if (usuarioService.comprobarInicioSesion(new Usuario(username, password))) {
+                    // login correcto
                     logeado = true;
-                    usuario.get().setUltimoLogin(LocalDateTime.now());
-                    usuarioService.ultimoLogin(usuario.get());
-                    usuarioLogeado = new Usuario(usuario.get().getUsername());
-                } throw new IllegalStateException("Las contraseñas no coinciden");
+                    usuario.setUltimoLogin(LocalDateTime.now());
+                    usuarioService.ultimoLogin(usuario);
+                    usuarioLogeado = new Usuario(usuario.getUsername());
+                    System.out.println("¡Login exitoso!");
+                } else {
+                    throw new IllegalStateException("Las contraseñas no coinciden");
+                }
+
             } catch (IllegalArgumentException | IllegalStateException e) {
                 System.out.println(e.getMessage());
-
             }
         }
+
         return logeado;
     }
 
 
-        public void darDeAltaUsuario() {
+
+    public void darDeAltaUsuario() {
             try {
 
                 System.out.println("Dime el username");
-                String username = entrada.nextLine();
+                String username = scanner.nextLine();
                 if (usuarioService.comprobarUsername(username)) throw new IllegalStateException("El usuario ya existe");
 
                 System.out.println("Dime tu contraseña");
-                String password = entrada.nextLine();
+                String password = scanner.nextLine();
 
                 Usuario usuario = new Usuario(username, password);
                 Usuario usuariocreado = usuarioService.crearUsuario(usuario);
@@ -150,7 +168,7 @@ public class UsuarioController implements CommandLineRunner {
         public void mostrarUsuarioPorUser(){
         try{
             System.out.println("Introduce el username a buscar: ");
-            String username = entrada.nextLine();
+            String username = scanner.nextLine();
 
             Optional<Usuario> buscarusuario = usuarioService.buscarUsuario(username);
 
@@ -165,7 +183,7 @@ public class UsuarioController implements CommandLineRunner {
         try{
 
             System.out.println("Introduce el username de quien quieres actualizar");
-            String julian = entrada.nextLine();
+            String julian = scanner.nextLine();
 
             Optional <Usuario> usuario = usuarioService.buscarUsuario(julian);
             //Usuario usuario1 = usuario.get(); // Aqui pasariamos un Optional a un usuario normal
@@ -173,17 +191,17 @@ public class UsuarioController implements CommandLineRunner {
             System.out.println("--- Datos encontrados ---");
             System.out.println("ID: " + usuario.get().getId() + " USERNAME: " + usuario.get().getUsername() + " ACTIVO?: " + (usuario.get().isActivo()?"ACTIVO" : "INACTIVO"));
             System.out.println("¿Que quieres actualizar? username / contraseña");
-            String opcion = entrada.nextLine().toLowerCase().trim();
+            String opcion = scanner.nextLine().toLowerCase().trim();
             switch (opcion){
                 case "username":
                     System.out.println("Introduce el nuevo username");
-                    String nuevoUsername = entrada.nextLine();
+                    String nuevoUsername = scanner.nextLine();
                     usuario.get().setUsername(nuevoUsername);
                     break;
                 case "contraseña":
                     System.out.println("Introduce la nueva contraseña");
-                    String nuevaContraseña = entrada.nextLine();
-                    usuario.get().setContrasenita(nuevaContraseña);
+                    String nuevaContraseña = scanner.nextLine();
+                    usuario.get().setPassword(nuevaContraseña);
                     break;
                 default:
                     System.out.println("Seleccione una opcion valida");
@@ -202,14 +220,14 @@ public class UsuarioController implements CommandLineRunner {
     public void desactivarEstadoUsuario(){
 
         System.out.println("Introduce el username de quien quieres actualizar");
-        String julian = entrada.nextLine();
+        String julian = scanner.nextLine();
 
         Optional <Usuario> usuario = usuarioService.buscarUsuario(julian);
         System.out.println("--- Datos encontrados ---");
         System.out.println("ID: " + usuario.get().getId() + " USERNAME: " + usuario.get().getUsername() + " ACTIVO?: " + (usuario.get().isActivo()?"ACTIVO" : "INACTIVO"));
         System.out.println("Introduce el nuevo estado True (ACTIVO) / False (INACTIVO)");
-        boolean nuevoEstado = entrada.hasNextBoolean();
-        entrada.nextLine();
+        boolean nuevoEstado = scanner.nextBoolean();
+        scanner.nextLine();
         usuario.get().setActivo(nuevoEstado);
 
         Usuario estadoActualizado = usuarioService.updateEstado(usuario.get());
@@ -220,14 +238,14 @@ public class UsuarioController implements CommandLineRunner {
     public void eliminarUsuario(){
 
         System.out.println("Introduce el username de quien quieres eliminar");
-        String julian = entrada.nextLine();
+        String julian = scanner.nextLine();
 
         Optional <Usuario> usuario = usuarioService.buscarUsuario(julian);
         System.out.println("--- Datos encontrados ---");
         System.out.println("ID: " + usuario.get().getId() + " USERNAME: " + usuario.get().getUsername() + " ACTIVO?: " + (usuario.get().isActivo()?"ACTIVO" : "INACTIVO"));
 
         System.out.println("Estas seguro que quieres eliminarlo? Si / No");
-        String opcion = entrada.nextLine().toLowerCase().trim();
+        String opcion = scanner.nextLine().toLowerCase().trim();
         switch (opcion){
             case "si":
                 usuarioService.deleteUsuario(usuario.get());
@@ -249,11 +267,11 @@ public class UsuarioController implements CommandLineRunner {
     public void cambiarContrasena(){
         System.out.println("Vamos a cambiar tu contraseña actual");
         System.out.println("Introduce la contraseña actual");
-        String contrasena = entrada.nextLine();
+        String contrasena = scanner.nextLine();
         try{
             if (!usuarioService.validarContrasena(usuarioLogeado.getUsername(),contrasena)) throw new IllegalStateException("Las contraseñas no coinciden");
             System.out.println("Dame la contraseña nueva");
-            String contrasenaNueva = entrada.nextLine();
+            String contrasenaNueva = scanner.nextLine();
             if (usuarioService.cambiarContrasena(usuarioLogeado.getUsername(),contrasenaNueva)){
                 System.out.println("Se ha cambiado la contraseña");
             } else {
@@ -291,7 +309,7 @@ public class UsuarioController implements CommandLineRunner {
             });
 
             System.out.println("\n[n] Siguiente | [p] Anterior | [q] Salir");
-            String opcion = entrada.nextLine().toLowerCase();
+            String opcion = scanner.nextLine().toLowerCase();
 
             switch (opcion) {
                 case "n":

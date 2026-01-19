@@ -17,13 +17,13 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private int id;
 
     @Column(name = "username",unique = true, length = 100, nullable = false)
     private String username;
 
     @Column(name = "password", nullable = false)
-    private String contrasenita;
+    private String password;
 
     @Column(name = "activo")
     private boolean activo = true;
@@ -37,9 +37,9 @@ public class Usuario {
     @Column(name = "estado", nullable = false)
     private boolean estado = true;
 
-    public Usuario(String username, String contrasenita) {
+    public Usuario(String username, String password) {
         this.username = username;
-        this.contrasenita = contrasenita;
+        this.password = password;
     }
 
     public Usuario(String username) {

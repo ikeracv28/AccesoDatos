@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS ejemploLombok;
-CREATE DATABASE IF NOT EXISTS ejemploLombok;
-USE ejemploLombok;
+DROP DATABASE IF EXISTS crudUsuarioIkerCompleto;
+CREATE DATABASE IF NOT EXISTS crudUsuarioIkerCompleto;
+USE crudUsuarioIkerCompleto;
 
 CREATE TABLE usuario(
                         id int auto_increment primary key not null,
@@ -12,8 +12,8 @@ CREATE TABLE usuario(
                         estado TINYINT(1) default 1 not null
 );
 
-INSERT INTO usuario ( username, password) values ('Marcos','$2a$12$CzdU7n41SWsBnlPVerrdu.rAHZGeeYxXqkZYyyraM0YxrT6ry4b.2');
+INSERT INTO usuario ( username, password) values ('Iker','$2a$12$CzdU7n41SWsBnlPVerrdu.rAHZGeeYxXqkZYyyraM0YxrT6ry4b.2');
 
 SELECT * FROM usuario;
 
-UPDATE usuario SET contador_intentos = 0, estado = 1 WHERE username = 'Marcos';
+UPDATE usuario SET contador_intentos = 0, estado = 1 WHERE username = 'Iker';

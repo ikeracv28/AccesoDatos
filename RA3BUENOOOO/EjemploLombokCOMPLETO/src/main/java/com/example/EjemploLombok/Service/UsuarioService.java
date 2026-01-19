@@ -28,7 +28,7 @@ public class UsuarioService {
 
         if (usuarioRepository.existsByUsername(usuario.getUsername())) throw new IllegalStateException("El usuario ya existe");
 
-        usuario.setContrasenita(passwordEncoder.encode(usuario.getContrasenita()));
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 
         return usuarioRepository.save(usuario);
 
@@ -45,8 +45,9 @@ public class UsuarioService {
         Optional <Usuario> usuariobd = usuarioRepository.findUsuarioByUsername(usuarioraw.getUsername());
         if(usuariobd.isEmpty()) throw new IllegalStateException("El usuario no existe");
 
+
         //Verifica que la contraseña que mete el usuario compara una contraseña sin hashear con una hasheada.
-        if(!passwordEncoder.matches(usuarioraw.getContrasenita(),usuariobd.get().getContrasenita())){
+        if(!passwordEncoder.matches(usuarioraw.getPassword(),usuariobd.get().getPassword())){
             int numeroFallos = usuariobd.get().getContadorIntentos()+1;
             usuariobd.get().setContadorIntentos(numeroFallos);
             if (usuariobd.get().getContadorIntentos()==3){
@@ -57,7 +58,6 @@ public class UsuarioService {
         }
 
         return true;
-
     }
 
     public ArrayList<Usuario> mostrarUsuariosService(){
@@ -77,8 +77,8 @@ public class UsuarioService {
         if (usuario == null) throw new IllegalStateException("El usuario actualizado esta vacio");
         Optional <Usuario> usuariodb = usuarioRepository.findById(usuario.getId());
         if (usuariodb.isEmpty()) throw new IllegalArgumentException("El usuario está vacio");
-        if (!usuario.getContrasenita().equals(usuariodb.get().getContrasenita())){
-            usuario.setContrasenita(passwordEncoder.encode(usuario.getContrasenita()));
+        if (!usuario.getPassword().equals(usuariodb.get().getPassword())){
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         }
 
        return usuarioRepository.save(usuario);
@@ -104,7 +104,7 @@ public class UsuarioService {
 
     public boolean validarContrasena(String username, String password){
         Optional<Usuario> usuario = usuarioRepository.findUsuarioByUsername(username);
-        if (passwordEncoder.matches(password,usuario.get().getContrasenita())){
+        if (passwordEncoder.matches(password,usuario.get().getPassword())){
             return true;
         }else {
             return false;
@@ -113,11 +113,11 @@ public class UsuarioService {
 
     public boolean cambiarContrasena(String username, String password){
         Optional<Usuario> usuario = usuarioRepository.findUsuarioByUsername(username);
-        String contrasenaVieja = usuario.get().getContrasenita();
-        usuario.get().setContrasenita(passwordEncoder.encode(password));
+        String contrasenaVieja = usuario.get().getPassword();
+        usuario.get().setPassword(passwordEncoder.encode(password));
 
         usuarioRepository.save(usuario.get());
-        if (contrasenaVieja.equals(usuario.get().getContrasenita())){
+        if (contrasenaVieja.equals(usuario.get().getPassword())){
             return false;
         }else {
             return true;
