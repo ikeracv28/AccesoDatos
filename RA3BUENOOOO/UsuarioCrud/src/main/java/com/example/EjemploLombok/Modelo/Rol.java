@@ -14,14 +14,14 @@ import java.util.Set;
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idRol")
+    @Column(name = "id_rol")
     private int idRol;
 
     @Column(name = "nombre", unique = true, length = 100, nullable = false)
     private String nombre;
 
 
-    @ManyToMany( mappedBy = "roles")
+    @ManyToMany( mappedBy = "roles", fetch = FetchType.LAZY)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Usuario> usuario = new HashSet<>();

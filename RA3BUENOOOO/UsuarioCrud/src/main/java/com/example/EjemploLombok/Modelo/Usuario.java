@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Data @AllArgsConstructor @NoArgsConstructor
 @Table(name = "Usuario")
 
-public class Usuario {
+public class Usuario /*implements UserDetails*/ {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,13 +38,15 @@ public class Usuario {
     private LocalDateTime fechaActualizacion;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "usuarioRol",
+            name = "usuario_rol",
             joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "idRol")
+            inverseJoinColumns = @JoinColumn(name = "id_rol")
     )
     private Set<Rol> roles = new HashSet<>();
+
+
 
 
 // ========================================
