@@ -3,6 +3,7 @@ let username = document.getElementById("username");
 let password = document.getElementById("password");
 let btnEnviar = document.getElementById("btnEnviar");
 
+fetch("/killSession")
 
 
 formulario.addEventListener('submit' , (e) => {
@@ -32,7 +33,7 @@ formulario.addEventListener('submit' , (e) => {
         })
         .then((data) => {
             console.log(data);
-            // window.location.href = '/control'
+             window.location.href = '/control'
         })
         .catch((error) => {
             // --- CASO ERROR (401, 500, o fallo de red) ---

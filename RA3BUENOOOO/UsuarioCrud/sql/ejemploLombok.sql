@@ -12,16 +12,16 @@ CREATE TABLE usuario(
 );
 
 create table rol(
-    idRol int auto_increment primary key not null,
+    id_rol int auto_increment primary key not null,
     nombre varchar(100) unique not null
 );
 
-create table usuarioRol(
-    idusuarioRol int auto_increment primary key not null,
+create table usuario_rol(
+    id_usuario_rol int auto_increment primary key not null,
     id int not null,
-    idRol int not null,
+    id_rol int not null,
     FOREIGN KEY (id) references usuario(id),
-    FOREIGN KEY (idRol) references rol(idRol)
+    FOREIGN KEY (id_rol) references rol(id_rol)
 );
 
 
@@ -31,8 +31,8 @@ INSERT INTO usuario ( username, password) values ('Rafa','$2a$12$CzdU7n41SWsBnlP
 insert into rol (nombre) values ('admin');
 insert into rol (nombre) values ('user');
 
-insert into usuarioRol(id, idRol) values (1, 1);
-insert into usuarioRol(id, idRol) values (2, 2);
+insert into usuario_rol(id, id_rol) values (1, 1);
+insert into usuario_rol(id, id_rol) values (2, 2);
 
 select * from usuario;
 

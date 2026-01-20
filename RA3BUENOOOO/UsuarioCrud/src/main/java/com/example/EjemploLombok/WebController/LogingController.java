@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/")
 public class LogingController {
 
 
@@ -38,7 +37,7 @@ public class LogingController {
         Optional<Usuario> usuarioOptional = usuarioService.buscarUsuario(loginDTO.getUsername());
         if(usuarioOptional.isPresent()){
             if (passwordEncoder.matches(loginDTO.getPassword(), usuarioOptional.get().getPassword())){
-                UsuarioSesionDTO infoUsuarioLogeado = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().toString());
+                UsuarioSesionDTO infoUsuarioLogeado = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().iterator().next().getNombre());
 
                 session.setAttribute("usuarioLogeado", infoUsuarioLogeado);
 
@@ -47,6 +46,13 @@ public class LogingController {
             }
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping("/killSession")
+    public String matarSesion(HttpSession session){
+        session.invalidate();
+
+        return "redirect:/";
     }
 
 
