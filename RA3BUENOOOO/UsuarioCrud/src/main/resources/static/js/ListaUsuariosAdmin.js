@@ -59,6 +59,30 @@ fetch('/admin/verUsuarios')
         document.getElementById("datosMostrar").innerHTML = tablaHTML;
     });
 
+
+// Configuración de los botones del Header
+document.getElementById("headerSalir").addEventListener("click", () => {
+    if(confirm("¿Deseas cerrar la sesión?")) {
+        window.location.href = '/killSession';
+    }
+});
+
+document.getElementById("headerVolver").addEventListener("click", () => {
+    window.location.href = '/control';
+});
+
+/**
+ * Función opcional para cambiar el título dinámicamente según la ventana
+ * @param {string} titulo - El nombre de la sección actual
+ */
+function actualizarEncabezado(titulo, subtitulo) {
+    document.getElementById("headerTitulo").innerText = titulo;
+    document.getElementById("headerSubtitulo").innerText = subtitulo;
+}
+
+// Ejemplo de uso al cargar la página
+actualizarEncabezado("Panel Administrativo", "Gestión total de la base de datos de usuarios");
+
 // Función para cargar TODOS los datos en el modal
 function prepararEdicion(id, username, rol, estado, fecha) {
 
@@ -102,7 +126,12 @@ document.getElementById('editForm').addEventListener('submit', function(e) {
 function eliminarUsuario(id) {
     if(confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
         fetch(`/admin/eliminarUsuario/${id}`, { method: 'DELETE' })
-            .then(res => { if(res.ok) location.reload(); });
+            .then(res => {
+                if(res.ok) {
+                    console.log("Este usuario se ha elimado")
+                    location.reload()
+                    btnVerUsuarios.click();
+                }  });
     }
 }
 

@@ -1,6 +1,5 @@
 package com.example.EjemploLombok.Service;
 
-import ch.qos.logback.core.util.StringUtil;
 import com.example.EjemploLombok.Modelo.Usuario;
 import com.example.EjemploLombok.Repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -60,16 +59,25 @@ public class UsuarioService {
         return usuarioBuscado;
     }
 
+    public Optional<Usuario> buscarUsuario(int id){
+        Optional<Usuario> usuarioBuscado = usuarioRepository.findUsuarioByIdUsuario(id);
+        if(usuarioBuscado.isEmpty()) throw new IllegalStateException("El usuario es nulo");
+        return usuarioBuscado;
+    }
+
+
+
+
     @Transactional
-    public Usuario updateUsuario(Usuario usuario){
+    public Usuario updateUsuario(Optional<Usuario> usuario){
         if (usuario == null) throw new IllegalStateException("El usuario actualizado esta vacio");
-        Optional <Usuario> usuariodb = usuarioRepository.findById(usuario.getIdUsuario());
+        Optional <Usuario> usuariodb = usuarioRepository.findById(usuario.get().getIdUsuario());
         if (usuariodb.isEmpty()) throw new IllegalArgumentException("El usuario está vacio");
-        if (!usuario.getPassword().equals(usuariodb.get().getPassword())){
-            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        if (!usuario.get().getPassword().equals(usuariodb.get().getPassword())){
+            usuario.get().setPassword(passwordEncoder.encode(usuario.get().getPassword()));
         }
 
-       return usuarioRepository.save(usuario);
+       return usuarioRepository.save(usuario.get());
 
     }
 
