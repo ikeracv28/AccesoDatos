@@ -9,12 +9,12 @@ btnSalir.addEventListener("click", ev => {
 })
 
 btnVerUsuarios.addEventListener("click", ev => {
-    window.location.href= '/admin/verUsuarios'
+    window.location.href= '/admin'
 })
 
 
 
-fetch('/user/datos', {
+fetch('/admin/datosAdmin', {
 
 })
     .then((response) => {

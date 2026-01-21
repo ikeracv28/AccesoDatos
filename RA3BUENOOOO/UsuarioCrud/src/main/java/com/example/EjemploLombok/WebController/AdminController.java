@@ -43,18 +43,38 @@ public class AdminController {
         }
     }
 
+
+    @GetMapping
+    public String vaidarAdmin(){
+        return "Admin/ListaUsuariosAdmin";
+    }
+
     @ResponseBody
     @GetMapping("/verUsuarios")
-    public ArrayList<Usuario> mostrarUsuarios(){
-        try{
-            ArrayList<Usuario> lista = usuarioService.mostrarUsuariosService();
-            if(lista.isEmpty()) throw new IllegalStateException("No hay usuarios disponibles");
+    public ArrayList<UsuarioSesionDTO> mostrarUsuarios(){
+        ArrayList<Usuario> lista = new ArrayList<>();
+        ArrayList<UsuarioSesionDTO> listaDTO = new ArrayList<>();
 
-            lista.get().getUsername(), lista.get().
+
+
+        try{
+            lista = usuarioService.mostrarUsuariosService();
+            for (Usuario usuario : lista){
+
+                listaDTO.add(new UsuarioSesionDTO(usuario.getIdUsuario(), usuario.getUsername(), usuario.getRoles().iterator().next().getNombre(), usuario.getFechaCreacion(), usuario.isActivo()));
+
+            }
+
+            if(lista.isEmpty()) throw new IllegalStateException("No hay usuarios disponibles");
+            return listaDTO;
 
         }catch (Exception e){
-
+            System.out.println(e.getMessage());
+            return listaDTO;
         }
+
+
+
     }
 
 
