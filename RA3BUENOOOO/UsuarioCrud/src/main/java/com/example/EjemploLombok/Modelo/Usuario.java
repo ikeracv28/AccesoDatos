@@ -1,6 +1,7 @@
 package com.example.EjemploLombok.Modelo;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,6 +40,7 @@ public class Usuario /*implements UserDetails*/ {
 
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(
             name = "usuario_rol",
             joinColumns = @JoinColumn(name = "id"),
