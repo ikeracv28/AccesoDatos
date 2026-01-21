@@ -1,137 +1,156 @@
-var datosMostrar = document.getElementById("datosMostrar")
-var btnSalir = document.getElementById("btnSalir")
-var volver = document.getElementById("volver")
+// --- Selectores de navegación ---
+const btnSalir = document.getElementById("btnSalir");
+const volver = document.getElementById("volver");
 
-
-btnSalir.addEventListener("click", ev => {
-    window.location.href= 'killSession'
-})
-
-volver.addEventListener("click", ev => {
-    window.location.href= '/control'
-})
-
-
-// Variable global para manejar el modal de Bootstrap
-let editModal;
-document.addEventListener('DOMContentLoaded', () => {
-    editModal = new bootstrap.Modal(document.getElementById('editModal'));
-});
-
-// Solicitud original modificada
-fetch('/admin/verUsuarios')
-    .then(response => response.json())
-    .then(data => {
-        let tablaHTML = `
-            <table class="table table-striped table-bordered table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>Rol</th>
-                        <th>Fecha</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-
-        data.forEach(usuario => {
-            const fecha = usuario.fechaCreacion ? new Date(usuario.fechaCreacion).toLocaleDateString() : '-';
-            const estadoBadge = usuario.estado ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>';
-
-            // Añadimos botones con atributos 'data' para pasar los datos del usuario
-            tablaHTML += `
-                <tr>
-                    <td>${usuario.idUsuario}</td>
-                    <td>${usuario.username}</td>
-                    <td>${usuario.nombreRol}</td>                       
-                    <td>${fecha}</td>
-                    <td class="text-center">${estadoBadge}</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning" onclick="prepararEdicion('${usuario.idUsuario}', '${usuario.username}', '${usuario.nombreRol}', ${usuario.estado})">Editar</button>
-                        <button class="btn btn-sm btn-danger" onclick="eliminarUsuario('${usuario.idUsuario}')">Eliminar</button>
-                    </td>
-                </tr>`;
-        });
-
-        tablaHTML += `</tbody></table>`;
-        document.getElementById("datosMostrar").innerHTML = tablaHTML;
-    });
-
-
-// Configuración de los botones del Header
-document.getElementById("headerSalir").addEventListener("click", () => {
-    if(confirm("¿Deseas cerrar la sesión?")) {
-        window.location.href = '/killSession';
-    }
-});
-
-document.getElementById("headerVolver").addEventListener("click", () => {
-    window.location.href = '/control';
-});
-
-/**
- * Función opcional para cambiar el título dinámicamente según la ventana
- * @param {string} titulo - El nombre de la sección actual
- */
-function actualizarEncabezado(titulo, subtitulo) {
-    document.getElementById("headerTitulo").innerText = titulo;
-    document.getElementById("headerSubtitulo").innerText = subtitulo;
+if (btnSalir) {
+    btnSalir.addEventListener("click", () => window.location.href = 'killSession');
+}
+if (volver) {
+    volver.addEventListener("click", () => window.location.href = '/control');
 }
 
-// Ejemplo de uso al cargar la página
-actualizarEncabezado("Panel Administrativo", "Gestión total de la base de datos de usuarios");
+// --- Lógica del Modal y Usuarios ---
+let editModal;
 
-// Función para cargar TODOS los datos en el modal
-function prepararEdicion(id, username, rol, estado, fecha) {
+document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar el modal de Bootstrap
+    const modalElement = document.getElementById('editModal');
+    if (modalElement) {
+        editModal = new bootstrap.Modal(modalElement);
+    }
 
-    const estadoBadge = estado ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>';
+    // Escuchar el envío del formulario
+    const editForm = document.getElementById('editForm');
+    if (editForm) {
+        editForm.addEventListener('submit', enviarActualizacion);
+    }
 
+    // Cargar los datos iniciales de la tabla
+    cargarUsuarios();
+});
+
+// Función para obtener y renderizar usuarios
+function cargarUsuarios() {
+    fetch('/admin/verUsuarios')
+        .then(response => response.json())
+        .then(data => {
+            let tablaHTML = `
+                <table class="table table-hover align-middle shadow-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="ps-3">ID</th>
+                            <th>Username</th>
+                            <th>Rol</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">`;
+
+            data.forEach(usuario => {
+                const fecha = usuario.fechaCreacion ? new Date(usuario.fechaCreacion).toLocaleDateString() : '-';
+                const estadoBadge = usuario.estado ?
+                    '<span class="badge bg-success">Activo</span>' :
+                    '<span class="badge bg-danger">Inactivo</span>';
+
+                // Usamos JSON.stringify para pasar el objeto de forma segura en el onclick si fuera necesario, 
+                // pero aquí pasamos parámetros simples.
+                tablaHTML += `
+                    <tr>
+                        <td class="ps-3 fw-bold text-muted">${usuario.idUsuario}</td>
+                        <td>${usuario.username}</td>
+                        <td><span class="badge bg-info text-dark">${usuario.nombreRol}</span></td>                       
+                        <td>${fecha}</td>
+                        <td>${estadoBadge}</td>
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-warning fw-bold" 
+                                    onclick="prepararEdicion('${usuario.idUsuario}', '${usuario.username}', '${usuario.nombreRol}', ${usuario.estado})">
+                                    Editar
+                                </button>
+                                <button class="btn btn-sm btn-danger fw-bold" 
+                                    onclick="eliminarUsuario('${usuario.idUsuario}')">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+
+            tablaHTML += `</tbody></table>`;
+            document.getElementById("datosMostrar").innerHTML = tablaHTML;
+        })
+        .catch(err => console.error("Error cargando usuarios:", err));
+}
+
+// Función global para llenar el modal
+window.prepararEdicion = function(id, username, rol, estado) {
+    // Llenar campos
     document.getElementById('editId').value = id;
     document.getElementById('editUsername').value = username;
     document.getElementById('editRol').value = rol;
-    document.getElementById('editEstado').value = estadoBadge;
 
+    // El select de estado necesita un string "true" o "false"
+    document.getElementById('editEstado').value = String(estado);
 
-    editModal.show();
-}
+    // Mostrar modal
+    if (editModal) {
+        editModal.show();
+    }
+};
 
 // Función para enviar la actualización al servidor
-document.getElementById('editForm').addEventListener('submit', function(e) {
+function enviarActualizacion(e) {
     e.preventDefault();
+
     const updatedUser = {
         idUsuario: document.getElementById('editId').value,
         username: document.getElementById('editUsername').value,
         nombreRol: document.getElementById('editRol').value,
-        estado: document.getElementById('editEstado').value === 'true'
-        // No enviamos la fecha porque el Service la mantiene o es automática
+        estado: document.getElementById('editEstado').value === 'true' // Convertir string a booleano
     };
 
     fetch('/admin/actualizarUsuario', {
-        method: 'POST', // O 'PUT' según tu controlador
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedUser)
-    }).then(res => {
-        if(res.ok) {
-            alert("Usuario actualizado con éxito");
-            location.reload();
-        } else {
-            alert("Error al actualizar");
-        }
-    });
-});
+    })
+        .then(res => {
+            if(res.ok) {
+                alert("Usuario actualizado con éxito");
+                editModal.hide();
+                location.reload();
+            } else {
+                alert("Error al actualizar");
+            }
+        })
+        .catch(error => {
+            console.error('Error en fetch:', error);
+            alert("Error crítico al conectar con el servidor");
+        });
+}
 
 // Función para eliminar
-function eliminarUsuario(id) {
+window.eliminarUsuario = function(id) {
     if(confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
         fetch(`/admin/eliminarUsuario/${id}`, { method: 'DELETE' })
             .then(res => {
                 if(res.ok) {
-                    console.log("Este usuario se ha elimado")
-                    location.reload()
-                    btnVerUsuarios.click();
-                }  });
+                    alert("Usuario eliminado");
+                    location.reload();
+                } else {
+                    alert("No se pudo eliminar el usuario");
+                }
+            })
+            .catch(err => console.error("Error al eliminar:", err));
     }
+};
+
+// Función de encabezado
+function actualizarEncabezado(titulo, subtitulo) {
+    if(document.getElementById("headerTitulo")) document.getElementById("headerTitulo").innerText = titulo;
+    if(document.getElementById("headerSubtitulo")) document.getElementById("headerSubtitulo").innerText = subtitulo;
 }
 
+actualizarEncabezado("Panel Administrativo", "Gestión total de la base de datos de usuarios");

@@ -35,6 +35,8 @@ insert into usuario_rol(id, id_rol) values (1, 1);
 insert into usuario_rol(id, id_rol) values (2, 2);
 
 select * from usuario;
+select * from usuario_rol;
+
 
 
 
