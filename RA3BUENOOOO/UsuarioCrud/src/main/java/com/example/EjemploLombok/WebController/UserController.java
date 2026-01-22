@@ -31,7 +31,7 @@ public class UserController {
     @GetMapping("/datos")
     public ResponseEntity<UsuarioSesionDTO> mostrarDatos(HttpSession session){
 
-        UsuarioSesionDTO usuarioSesionDTO = (UsuarioSesionDTO) session.getAttribute("usuarioLogeado");
+        UsuarioSesionDTO usuarioSesionDTO = (UsuarioSesionDTO) session.getAttribute("usuarioLogueado");
         if (usuarioSesionDTO == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
