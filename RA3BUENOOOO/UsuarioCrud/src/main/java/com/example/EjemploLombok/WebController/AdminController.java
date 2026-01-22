@@ -28,6 +28,9 @@ public class AdminController {
     @Autowired
     RolService rolService;
 
+
+
+
     @ResponseBody
     @GetMapping("/datosAdmin")
     public ResponseEntity<UsuarioSesionDTO> mostrarDatosAdmin(HttpSession session) {
@@ -49,7 +52,14 @@ public class AdminController {
 
 
     @GetMapping
-    public String vaidarAdmin() {
+    public String vaidarAdmin(HttpSession session)
+    {
+        UsuarioSesionDTO usarioLogeado = (UsuarioSesionDTO) session.getAttribute("usuarioLogueado");
+        if (usarioLogeado == null){
+            return "redirect:killSession";
+        }if(!usarioLogeado.getNombreRol().equalsIgnoreCase("admin")){
+            return "redirect:killSession";
+        }
         return "Admin/ListaUsuariosAdmin";
     }
 
@@ -78,8 +88,10 @@ public class AdminController {
 
     @ResponseBody
     @PostMapping("/actualizarUsuario")
-    public ResponseEntity<?> actualizarUsuarios(@RequestBody UsuarioSesionDTO usuarioSessionDTO) {
-        if (usuarioSessionDTO == null) {
+    public ResponseEntity<?> actualizarUsuarios(HttpSession session) {
+        UsuarioSesionDTO usuarioSessionDTO = (UsuarioSesionDTO) session.getAttribute("usuarioLogueado");
+
+        if (usuarioSessionDTO == null || !"admin".equalsIgnoreCase(usuarioSessionDTO.getNombreRol())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         try {
@@ -114,7 +126,13 @@ public class AdminController {
 
     @ResponseBody
     @DeleteMapping("/eliminarUsuario/{id}")
-    public ResponseEntity<?> eliminarUsuario(@PathVariable int id) {
+    public ResponseEntity<?> eliminarUsuario(@PathVariable int id, HttpSession session) {
+        UsuarioSesionDTO usuarioSessionDTO = (UsuarioSesionDTO) session.getAttribute("usuarioLogueado");
+
+        if (usuarioSessionDTO == null || !"admin".equalsIgnoreCase(usuarioSessionDTO.getNombreRol())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         try {
             Optional<Usuario> usuario = usuarioService.buscarUsuario(id);
 

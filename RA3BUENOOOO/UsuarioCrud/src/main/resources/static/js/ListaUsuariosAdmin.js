@@ -1,43 +1,104 @@
-// --- Selectores de navegación ---
+// --- Selectores de navegación y elementos ---
+const saludoUsuario = document.getElementById("saludoUsuario");
+const datosMostrar = document.getElementById("datosMostrar");
 const btnSalir = document.getElementById("btnSalir");
+const btnVerUsuarios = document.getElementById("btnVerUsuarios");
 const volver = document.getElementById("volver");
 
+// --- VARIABLE PARA EL MODAL NATIVO ---
+const editDialog = document.getElementById('editDialog');
+const editForm = document.getElementById('editForm');
+
+// --- EVENTOS DE NAVEGACIÓN ---
 if (btnSalir) {
     btnSalir.addEventListener("click", () => window.location.href = 'killSession');
+}
+if (btnVerUsuarios) {
+    btnVerUsuarios.addEventListener("click", () => window.location.href = '/admin');
 }
 if (volver) {
     volver.addEventListener("click", () => window.location.href = '/control');
 }
 
-// --- Lógica del Modal y Usuarios ---
-let editModal;
-
+// --- CARGA INICIAL ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializar el modal de Bootstrap
-    const modalElement = document.getElementById('editModal');
-    if (modalElement) {
-        editModal = new bootstrap.Modal(modalElement);
-    }
-
-    // Escuchar el envío del formulario
-    const editForm = document.getElementById('editForm');
+    // Escuchar el envío del formulario del dialog
     if (editForm) {
         editForm.addEventListener('submit', enviarActualizacion);
     }
 
-    // Cargar los datos iniciales de la tabla
-    cargarUsuarios();
+    // Cargamos los roles reales de la base de datos
+    cargarRolesEnSelect();
+
+    // Inicializar encabezados
+    actualizarEncabezado("PANEL ADMINISTRATIVO", "Panel de Administración > Lista de Usuarios Registrados");
+
+    // Decidir qué cargar según el contenedor presente
+    if (document.getElementById("datosMostrar")) {
+        // Si estamos en la vista de lista completa
+        if (window.location.pathname.includes('/admin')) {
+            cargarUsuarios();
+        } else {
+            // Si estamos en el perfil individual
+            cargarDatosPerfil();
+        }
+    }
 });
 
-// Función para obtener y renderizar usuarios
+// --- LÓGICA DE PERFIL (MANTENIDA) ---
+function cargarDatosPerfil() {
+    fetch('/admin/datosAdmin')
+        .then(response => {
+            if (response.ok) return response.json();
+            throw new Error(`Error ${response.status}`);
+        })
+        .then(data => {
+            saludoUsuario.style.opacity = "0";
+            saludoUsuario.innerHTML = `Bienvenido de nuevo, <span class="text-primary">${data.username}</span>`;
+
+            setTimeout(() => {
+                saludoUsuario.style.transition = "opacity 0.8s ease-in-out";
+                saludoUsuario.style.opacity = "1";
+            }, 100);
+
+            const fecha = data.fechaCreacion ? new Date(data.fechaCreacion).toLocaleDateString() : '-';
+            datosMostrar.innerHTML = `
+                <div class="table-container">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-3">ID</th>
+                                <th>Username</th>
+                                <th>Rol</th>
+                                <th>Fecha Creación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="ps-3 fw-bold text-muted">${data.idUsuario}</td>
+                                <td class="fw-bold">${data.username}</td>
+                                <td><span class="badge bg-dark px-3 py-2 text-uppercase">${data.nombreRol}</span></td>
+                                <td class="text-muted">${fecha}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>`;
+        })
+        .catch(err => {
+            console.error(err);
+            datosMostrar.innerHTML = `<div class="alert alert-danger">Error al cargar perfil.</div>`;
+        });
+}
+
+// --- LÓGICA DE LISTA COMPLETA (ADMIN) ---
 function cargarUsuarios() {
     fetch('/admin/verUsuarios')
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
             let tablaHTML = `
             <div class="table-container">
                 <table class="table table-hover align-middle mb-0">
-                    <thead>
+                    <thead class="table-dark">
                         <tr>
                             <th class="ps-3">ID</th>
                             <th>Username</th>
@@ -76,38 +137,69 @@ function cargarUsuarios() {
                         </td>
                     </tr>`;
             });
-
             tablaHTML += `</tbody></table></div>`;
-            document.getElementById("datosMostrar").innerHTML = tablaHTML;
-        })
-        .catch(err => console.error("Error cargando usuarios:", err));
+            datosMostrar.innerHTML = tablaHTML;
+        });
 }
 
-// Función global para llenar el modal
-window.prepararEdicion = function(id, username, rol, estado) {
-    // Llenar campos
+// --- FUNCIONES DEL MODAL <DIALOG> ---
+async function prepararEdicion(id, username, rol, estado) {
+    // 1. Cargamos los roles primero y esperamos a que termine
+    await cargarRolesEnSelect();
+
+    // 2. Llenamos los campos
     document.getElementById('editId').value = id;
     document.getElementById('editUsername').value = username;
-    document.getElementById('editRol').value = rol;
 
-    // El select de estado necesita un string "true" o "false"
-    document.getElementById('editEstado').value = String(estado);
+    // 3. Asignamos el rol (ahora que sabemos que las opciones existen)
+    const selectRol = document.getElementById('editRol');
+    selectRol.value = rol;
 
-    // Mostrar modal
-    if (editModal) {
-        editModal.show();
+    document.getElementById('editEstado').value = estado.toString();
+
+    // 4. Abrimos el modal
+    if (editDialog) {
+        editDialog.showModal();
     }
-};
+}
 
-// Función para enviar la actualización al servidor
+// Convertimos cargarRolesEnSelect en una función que devuelve una Promesa
+async function cargarRolesEnSelect() {
+    const selectRol = document.getElementById('editRol');
+    if (!selectRol) return;
+
+    try {
+        const res = await fetch('/admin/verRoles');
+
+        // Si el servidor responde 404 o error, lanzamos error para ir al catch
+        if (!res.ok) throw new Error("Ruta no encontrada");
+
+        const roles = await res.json();
+
+        selectRol.innerHTML = "";
+        roles.forEach(rol => {
+            let option = document.createElement('option');
+            option.value = rol.nombre;
+            option.text = rol.nombre.toUpperCase();
+            selectRol.appendChild(option);
+        });
+    } catch (err) {
+        console.warn("Usando roles por defecto debido a error 404 en el servidor");
+        // --- SOLUCIÓN MANUAL SI FALLA EL FETCH ---
+        selectRol.innerHTML = `
+            <option value="ADMIN">ADMIN</option>
+            <option value="USER">USER</option>
+        `;
+    }
+}
+
 function enviarActualizacion(e) {
     e.preventDefault();
-
     const updatedUser = {
         idUsuario: document.getElementById('editId').value,
         username: document.getElementById('editUsername').value,
         nombreRol: document.getElementById('editRol').value,
-        estado: document.getElementById('editEstado').value === 'true' // Convertir string a booleano
+        estado: document.getElementById('editEstado').value === 'true'
     };
 
     fetch('/admin/actualizarUsuario', {
@@ -117,39 +209,42 @@ function enviarActualizacion(e) {
     })
         .then(res => {
             if(res.ok) {
-                alert("Usuario actualizado con éxito");
-                editModal.hide();
+                editDialog.close();
                 location.reload();
             } else {
                 alert("Error al actualizar");
             }
-        })
-        .catch(error => {
-            console.error('Error en fetch:', error);
-            alert("Error crítico al conectar con el servidor");
         });
 }
 
-// Función para eliminar
-window.eliminarUsuario = function(id) {
-    if(confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+// --- FUNCIONES DE APOYO (MANTENIDAS) ---
+/*
+function cargarRolesEnSelect() {
+    fetch('/admin/verRoles')
+        .then(res => res.json())
+        .then(roles => {
+            const selectRol = document.getElementById('editRol');
+            if (!selectRol) return;
+            selectRol.innerHTML = "";
+            roles.forEach(rol => {
+                let option = document.createElement('option');
+                option.value = rol.nombre;
+                option.text = rol.nombre.toUpperCase();
+                selectRol.appendChild(option);
+            });
+        });
+}
+*/
+function eliminarUsuario(id) {
+    if(confirm('¿Estás seguro de eliminar este usuario?')) {
         fetch(`/admin/eliminarUsuario/${id}`, { method: 'DELETE' })
-            .then(res => {
-                if(res.ok) {
-                    alert("Usuario eliminado");
-                    location.reload();
-                } else {
-                    alert("No se pudo eliminar el usuario");
-                }
-            })
-            .catch(err => console.error("Error al eliminar:", err));
+            .then(res => res.ok ? location.reload() : alert("Error al eliminar"));
     }
-};
-
-// Función de encabezado
-function actualizarEncabezado(titulo, subtitulo) {
-    if(document.getElementById("headerTitulo")) document.getElementById("headerTitulo").innerText = titulo;
-    if(document.getElementById("headerSubtitulo")) document.getElementById("headerSubtitulo").innerText = subtitulo;
 }
 
-actualizarEncabezado("Panel Administrativo", "Gestión total de la base de datos de usuarios");
+function actualizarEncabezado(titulo, subtitulo) {
+    const hTitulo = document.getElementById("headerTitulo");
+    const hSubtitulo = document.getElementById("headerSubtitulo");
+    if(hTitulo) hTitulo.innerText = titulo;
+    if(hSubtitulo) hSubtitulo.innerText = subtitulo;
+}
