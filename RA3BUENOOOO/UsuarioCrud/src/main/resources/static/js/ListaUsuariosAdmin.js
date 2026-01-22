@@ -34,22 +34,20 @@ function cargarUsuarios() {
     fetch('/admin/verUsuarios')
         .then(response => response.json())
         .then(data => {
-            // Agregamos un div contenedor para el borde redondeado
-            // ... dentro de cargarUsuarios
             let tablaHTML = `
             <div class="table-container">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="table-dark">
-                            <tr>
-                                <th class="ps-3">ID</th>
-                                <th>Username</th>
-                                <th>Rol</th>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                                <th class="text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white">`;
+                    <thead>
+                        <tr>
+                            <th class="ps-3">ID</th>
+                            <th>Username</th>
+                            <th>Rol</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white">`;
 
             data.forEach(usuario => {
                 const fecha = usuario.fechaCreacion ? new Date(usuario.fechaCreacion).toLocaleDateString() : '-';
@@ -57,22 +55,20 @@ function cargarUsuarios() {
                     '<span class="badge bg-success">Activo</span>' :
                     '<span class="badge bg-danger">Inactivo</span>';
 
-                // Usamos JSON.stringify para pasar el objeto de forma segura en el onclick si fuera necesario, 
-                // pero aquí pasamos parámetros simples.
                 tablaHTML += `
                     <tr>
                         <td class="ps-3 fw-bold text-muted">${usuario.idUsuario}</td>
-                        <td>${usuario.username}</td>
+                        <td class="fw-bold">${usuario.username}</td>
                         <td><span class="badge bg-info text-dark">${usuario.nombreRol}</span></td>                       
                         <td>${fecha}</td>
                         <td>${estadoBadge}</td>
                         <td class="text-center">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-warning fw-bold" 
+                                <button class="btn btn-sm btn-warning fw-bold px-3" 
                                     onclick="prepararEdicion('${usuario.idUsuario}', '${usuario.username}', '${usuario.nombreRol}', ${usuario.estado})">
                                     Editar
                                 </button>
-                                <button class="btn btn-sm btn-danger fw-bold" 
+                                <button class="btn btn-sm btn-danger fw-bold px-3" 
                                     onclick="eliminarUsuario('${usuario.idUsuario}')">
                                     Eliminar
                                 </button>

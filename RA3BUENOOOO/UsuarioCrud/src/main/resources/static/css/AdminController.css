@@ -1,51 +1,64 @@
 :root {
-    --bg-main: #eef2f7;
-    --white: #ffffff;
+    --bg-main: #f0f2f5;
     --dark-panel: #212529;
+    --white: #ffffff;
 }
 
 body {
-    background-color: var(--bg-main);
+    background-color: var(--bg-main) !important;
     font-family: 'Segoe UI', sans-serif;
 }
 
+/* Header */
+.navbar {
+    background-color: var(--dark-panel) !important;
+}
+
+/* Tarjeta Principal */
 .container-main {
-    max-width: 850px;
-    margin: 20px auto;
+    max-width: 1000px; /* Un poco más ancha para la lista */
+    margin: 0 auto 50px auto;
     background: var(--white);
     padding: 35px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.06);
 }
 
+/* Tabla y Efecto Hover */
+.table-container {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
 .table thead {
-    background-color: var(--dark-panel);
-    color: white;
+    background-color: var(--dark-panel) !important;
+    color: white !important;
 }
 
-/* Esto asegura que el modal flote sobre todo lo demás */
-.modal-backdrop.show {
-    opacity: 0.7;
-    background-color: #1a1d20;
+/* EFECTO HOVER MEJORADO */
+.table-hover tbody tr {
+    transition: all 0.2s ease;
+    cursor: default;
 }
 
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05) !important; /* Azul muy clarito */
+    transform: scale(1.005); /* Crece un pelín */
+    box-shadow: inset 4px 0 0 #0d6efd; /* Linea azul a la izquierda */
+}
+
+/* Badges */
+.badge {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+/* Modales */
 .modal-content {
     border: none;
-    border-radius: 12px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.3);
-    animation: fadeInModal 0.3s ease-out;
-}
-
-@keyframes fadeInModal {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Estilo para que la tabla de administración no sea tan gigante */
-#datosMostrar {
-    overflow-x: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
 }
