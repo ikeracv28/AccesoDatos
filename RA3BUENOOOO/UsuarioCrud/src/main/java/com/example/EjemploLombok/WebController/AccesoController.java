@@ -17,7 +17,7 @@ public class AccesoController {
 
     @GetMapping()
     public String kroos(HttpSession session) {
-        UsuarioSesionDTO usuarioSesionDTO = (UsuarioSesionDTO) session.getAttribute("usuarioLogeado");
+        UsuarioSesionDTO usuarioSesionDTO = (UsuarioSesionDTO) session.getAttribute("usuarioLogueado");
 
         if (usuarioSesionDTO != null) {
             if (usuarioSesionDTO.getNombreRol().equalsIgnoreCase("admin")) {

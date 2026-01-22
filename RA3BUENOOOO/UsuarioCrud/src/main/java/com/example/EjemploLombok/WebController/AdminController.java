@@ -35,7 +35,7 @@ public class AdminController {
     @GetMapping("/datosAdmin")
     public ResponseEntity<UsuarioSesionDTO> mostrarDatosAdmin(HttpSession session) {
 
-        UsuarioSesionDTO usuarioSesionDTO = (UsuarioSesionDTO) session.getAttribute("usuarioLogeado");
+        UsuarioSesionDTO usuarioSesionDTO = (UsuarioSesionDTO) session.getAttribute("usuarioLogueado");
         if (usuarioSesionDTO == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -51,13 +51,14 @@ public class AdminController {
     }
 
 
-    @GetMapping
+    @GetMapping()
     public String vaidarAdmin(HttpSession session)
     {
         UsuarioSesionDTO usarioLogeado = (UsuarioSesionDTO) session.getAttribute("usuarioLogueado");
         if (usarioLogeado == null){
             return "redirect:killSession";
-        }if(!usarioLogeado.getNombreRol().equalsIgnoreCase("admin")){
+        }
+        if(!usarioLogeado.getNombreRol().equalsIgnoreCase("admin")){
             return "redirect:killSession";
         }
         return "Admin/ListaUsuariosAdmin";
@@ -88,10 +89,10 @@ public class AdminController {
 
     @ResponseBody
     @PostMapping("/actualizarUsuario")
-    public ResponseEntity<?> actualizarUsuarios(HttpSession session) {
-        UsuarioSesionDTO usuarioSessionDTO = (UsuarioSesionDTO) session.getAttribute("usuarioLogueado");
+    public ResponseEntity<?> actualizarUsuarios(@RequestBody UsuarioSesionDTO usuarioSessionDTO, HttpSession session ) {
+        UsuarioSesionDTO usuarioSession = (UsuarioSesionDTO) session.getAttribute("usuarioLogueado");
 
-        if (usuarioSessionDTO == null || !"admin".equalsIgnoreCase(usuarioSessionDTO.getNombreRol())) {
+        if (usuarioSession == null || !"admin".equalsIgnoreCase(usuarioSession.getNombreRol())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         try {

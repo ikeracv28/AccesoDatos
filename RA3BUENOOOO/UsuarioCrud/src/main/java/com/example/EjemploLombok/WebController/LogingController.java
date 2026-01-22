@@ -39,7 +39,7 @@ public class LogingController {
             if (passwordEncoder.matches(loginDTO.getPassword(), usuarioOptional.get().getPassword())){
                 UsuarioSesionDTO infoUsuarioLogeado = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().iterator().next().getNombre(), usuarioOptional.get().getFechaCreacion());
 
-                session.setAttribute("usuarioLogeado", infoUsuarioLogeado);
+                session.setAttribute("usuarioLogueado", infoUsuarioLogeado);
 
                 return ResponseEntity.ok(infoUsuarioLogeado);
 
