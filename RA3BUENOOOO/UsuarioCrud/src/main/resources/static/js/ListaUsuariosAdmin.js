@@ -34,19 +34,22 @@ function cargarUsuarios() {
     fetch('/admin/verUsuarios')
         .then(response => response.json())
         .then(data => {
+            // Agregamos un div contenedor para el borde redondeado
+            // ... dentro de cargarUsuarios
             let tablaHTML = `
-                <table class="table table-hover align-middle shadow-sm">
+            <div class="table-container">
+                <table class="table table-hover align-middle mb-0">
                     <thead class="table-dark">
-                        <tr>
-                            <th class="ps-3">ID</th>
-                            <th>Username</th>
-                            <th>Rol</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                            <th class="text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white">`;
+                            <tr>
+                                <th class="ps-3">ID</th>
+                                <th>Username</th>
+                                <th>Rol</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">`;
 
             data.forEach(usuario => {
                 const fecha = usuario.fechaCreacion ? new Date(usuario.fechaCreacion).toLocaleDateString() : '-';
@@ -78,7 +81,7 @@ function cargarUsuarios() {
                     </tr>`;
             });
 
-            tablaHTML += `</tbody></table>`;
+            tablaHTML += `</tbody></table></div>`;
             document.getElementById("datosMostrar").innerHTML = tablaHTML;
         })
         .catch(err => console.error("Error cargando usuarios:", err));

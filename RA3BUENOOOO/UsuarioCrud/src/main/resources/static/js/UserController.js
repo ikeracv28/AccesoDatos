@@ -32,7 +32,8 @@ fetch('/user/datos', {})
         const fecha = data.fechaCreacion ? new Date(data.fechaCreacion).toLocaleDateString() : '-';
 
         datosMostrar.innerHTML = `
-            <table class="table table-hover align-middle mb-0">
+        <div class="table-container">
+            <table class="table table-hover align-middle">
                 <thead>
                     <tr>
                         <th class="ps-3">ID</th>
@@ -45,12 +46,13 @@ fetch('/user/datos', {})
                     <tr>
                         <td class="ps-3 fw-bold text-muted">${data.idUsuario}</td>
                         <td class="fw-bold">${data.username}</td>
-                        <td><span class="badge bg-primary px-3 py-2">${data.nombreRol}</span></td>
+                        <td><span class="badge bg-primary">${data.nombreRol}</span></td>
                         <td class="text-muted">${fecha}</td>
                     </tr>
                 </tbody>
             </table>
-        `;
+        </div>
+    `;
     })
     .catch((error) => {
         console.error("Fallo al cargar datos:", error);
