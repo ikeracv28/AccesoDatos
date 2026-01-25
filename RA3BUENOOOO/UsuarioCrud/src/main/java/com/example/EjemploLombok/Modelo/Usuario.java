@@ -47,12 +47,16 @@ public class Usuario /*implements UserDetails*/ {
     private Set<Rol> roles = new HashSet<>();
 
 
+
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     // aqui se pone la clave foranea de mi tabla
     @JoinColumn(name = "id_departamento")
     private Departamento departamento;
+
+
 
 
 

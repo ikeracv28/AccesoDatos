@@ -37,7 +37,7 @@ public class UserController {
             }
         try{
             Optional<Usuario> usuarioOptional = usuarioService.buscarUsuario(usuarioSesionDTO.getUsername());
-            UsuarioSesionDTO usuarioAmostrar = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().iterator().next().getNombre(), usuarioOptional.get().getFechaCreacion(), usuarioOptional.get().getDepartamento().getNombre_departamento());
+            UsuarioSesionDTO usuarioAmostrar = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().iterator().next().getNombre(), usuarioOptional.get().getFechaCreacion(), usuarioOptional.get().getDepartamento().getNombreDepartamento());
 
             return ResponseEntity.ok(usuarioAmostrar);
 

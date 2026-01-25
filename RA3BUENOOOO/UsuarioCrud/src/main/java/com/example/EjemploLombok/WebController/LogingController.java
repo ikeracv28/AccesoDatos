@@ -37,7 +37,7 @@ public class LogingController {
         Optional<Usuario> usuarioOptional = usuarioService.buscarUsuario(loginDTO.getUsername());
         if(usuarioOptional.isPresent()){
             if (passwordEncoder.matches(loginDTO.getPassword(), usuarioOptional.get().getPassword())){
-                UsuarioSesionDTO infoUsuarioLogeado = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().iterator().next().getNombre(), usuarioOptional.get().getFechaCreacion(), usuarioOptional.get().getDepartamento().getNombre_departamento());
+                UsuarioSesionDTO infoUsuarioLogeado = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().iterator().next().getNombre(), usuarioOptional.get().getFechaCreacion(), usuarioOptional.get().getDepartamento().getNombreDepartamento());
 
                 session.setAttribute("usuarioLogueado", infoUsuarioLogeado);
 

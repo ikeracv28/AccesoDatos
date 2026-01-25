@@ -2,8 +2,10 @@ package com.example.EjemploLombok.WebController;
 
 
 import com.example.EjemploLombok.DTO.UsuarioSesionDTO;
+import com.example.EjemploLombok.Modelo.Departamento;
 import com.example.EjemploLombok.Modelo.Rol;
 import com.example.EjemploLombok.Modelo.Usuario;
+import com.example.EjemploLombok.Service.DepartamentoService;
 import com.example.EjemploLombok.Service.RolService;
 import com.example.EjemploLombok.Service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +31,10 @@ public class AdminController {
     RolService rolService;
 
 
+    @Autowired
+    DepartamentoService departamentoService;
+
+
 
 
     @ResponseBody
@@ -41,7 +47,7 @@ public class AdminController {
         }
         try {
             Optional<Usuario> usuarioOptional = usuarioService.buscarUsuario(usuarioSesionDTO.getUsername());
-            UsuarioSesionDTO usuarioAmostrar = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().iterator().next().getNombre(), usuarioOptional.get().getFechaCreacion(), usuarioOptional.get().getDepartamento().getNombre_departamento());
+            UsuarioSesionDTO usuarioAmostrar = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().iterator().next().getNombre(), usuarioOptional.get().getFechaCreacion(), usuarioOptional.get().getDepartamento().getNombreDepartamento());
 
             return ResponseEntity.ok(usuarioAmostrar);
 
@@ -74,7 +80,7 @@ public class AdminController {
             lista = usuarioService.mostrarUsuariosService();
             for (Usuario usuario : lista) {
 
-                listaDTO.add(new UsuarioSesionDTO(usuario.getIdUsuario(), usuario.getUsername(), usuario.getRoles().iterator().next().getNombre(), usuario.getFechaCreacion(), usuario.isActivo(), usuario.getDepartamento().getNombre_departamento()));
+                listaDTO.add(new UsuarioSesionDTO(usuario.getIdUsuario(), usuario.getUsername(), usuario.getRoles().iterator().next().getNombre(), usuario.getFechaCreacion(), usuario.isActivo(), usuario.getDepartamento().getNombreDepartamento()));
 
             }
 
@@ -100,6 +106,21 @@ public class AdminController {
 
             usuario.get().setUsername(usuarioSessionDTO.getUsername());
             usuario.get().setActivo(usuarioSessionDTO.isEstado());
+
+
+
+
+            String nuevoDepartamento = usuarioSessionDTO.getNombreDepartamento();
+            if (StringUtils.hasText(nuevoDepartamento)) {
+                Optional<Departamento> departamento = departamentoService.obtenerPorNombre(nuevoDepartamento);
+
+                if (departamento.isPresent()) {
+                    usuario.get().setDepartamento(departamento.get());
+
+                } else
+                    System.out.println("No se ha encontrado ningun Departamento");
+
+            }
 
 
             String nombreRol = usuarioSessionDTO.getNombreRol();

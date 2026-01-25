@@ -26,7 +26,7 @@ public class Departamento {
     private int idDepartamento;
 
     @Column(name = "nombre_departamento", length = 100)
-    private String nombre_departamento;
+    private String nombreDepartamento;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "departamento", cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
