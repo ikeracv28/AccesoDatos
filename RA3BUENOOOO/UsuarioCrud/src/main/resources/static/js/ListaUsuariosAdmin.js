@@ -129,13 +129,13 @@ function cargarUsuarios() {
                         <td>${estadoBadge}</td>
                         <td class="text-center">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-warning fw-bold px-3" 
+                                <button class="btn btn-sm" style="font-size: 0.7rem;" 
                                     onclick="prepararEdicion('${usuario.idUsuario}', '${usuario.username}', '${usuario.nombreRol}', '${usuario.nombreDepartamento}',${usuario.estado})">
-                                    Editar
+                                    EDITAR
                                 </button>
-                                <button class="btn btn-sm btn-danger fw-bold px-3" 
+                                <button class="btn btn-sm btn-danger-custom" style="font-size: 0.7rem; margin-left: 5px;" 
                                     onclick="eliminarUsuario('${usuario.idUsuario}')">
-                                    Eliminar
+                                    BORRAR
                                 </button>
                             </div>
                         </td>
@@ -255,3 +255,4 @@ function actualizarEncabezado(titulo, subtitulo) {
     if(hTitulo) hTitulo.innerText = titulo;
     if(hSubtitulo) hSubtitulo.innerText = subtitulo;
 }
+

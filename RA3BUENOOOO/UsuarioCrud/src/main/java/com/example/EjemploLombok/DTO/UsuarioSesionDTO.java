@@ -18,6 +18,7 @@ public class UsuarioSesionDTO implements Serializable {
     private LocalDateTime fechaCreacion;
     private boolean estado;
     private String nombreDepartamento;
+    private String password;
 
     public UsuarioSesionDTO(int idUsuario, String username, String nombreRol, LocalDateTime fechaCreacion, String nombreDepartamento) {
         this.idUsuario = idUsuario;
@@ -25,5 +26,14 @@ public class UsuarioSesionDTO implements Serializable {
         this.nombreRol = nombreRol;
         this.username = username;
         this.nombreDepartamento = nombreDepartamento;
+    }
+
+    public UsuarioSesionDTO(int idUsuario, String username, String nombreRol, LocalDateTime fechaCreacion, String nombreDepartamento, String password) {
+        this.idUsuario = idUsuario;
+        this.fechaCreacion = fechaCreacion;
+        this.nombreRol = nombreRol;
+        this.username = username;
+        this.nombreDepartamento = nombreDepartamento;
+        this.password = password;
     }
 }

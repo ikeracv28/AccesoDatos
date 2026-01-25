@@ -80,7 +80,7 @@ public class AdminController {
             lista = usuarioService.mostrarUsuariosService();
             for (Usuario usuario : lista) {
 
-                listaDTO.add(new UsuarioSesionDTO(usuario.getIdUsuario(), usuario.getUsername(), usuario.getRoles().iterator().next().getNombre(), usuario.getFechaCreacion(), usuario.isActivo(), usuario.getDepartamento().getNombreDepartamento()));
+                listaDTO.add(new UsuarioSesionDTO(usuario.getIdUsuario(), usuario.getUsername(), usuario.getRoles().iterator().next().getNombre(), usuario.getFechaCreacion(), usuario.isActivo(), usuario.getDepartamento().getNombreDepartamento(), usuario.getPassword()));
 
             }
 
@@ -90,6 +90,41 @@ public class AdminController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return listaDTO;
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/verDepartamentos")
+    public List<Departamento> verDepartamentos() {
+        return departamentoService.obtenerDepartamentos(); // Asegúrate de tener este método en tu service
+    }
+
+    @ResponseBody
+    @PostMapping("/crearUsuario")
+    public ResponseEntity<?> crearNuevoUsuario(@RequestBody UsuarioSesionDTO dto, HttpSession session) {
+        // Verificación de Admin (Igual que tus otros métodos)
+        UsuarioSesionDTO admin = (UsuarioSesionDTO) session.getAttribute("usuarioLogueado");
+        if (admin == null || !"admin".equalsIgnoreCase(admin.getNombreRol())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        try {
+            Usuario nuevoUsuario = new Usuario(dto.getUsername(), dto.getPassword()); //
+
+            // Asignar Departamento
+            Optional<Departamento> dep = departamentoService.obtenerPorNombre(dto.getNombreDepartamento());
+            dep.ifPresent(nuevoUsuario::setDepartamento);
+
+            // Asignar Rol
+            Optional<Rol> rol = rolService.obtenerPorNombre(dto.getNombreRol());
+            if (rol.isPresent()) {
+                nuevoUsuario.getRoles().add(rol.get());
+            }
+
+            usuarioService.crearUsuario(nuevoUsuario); // El service ya hashea la contraseña
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 

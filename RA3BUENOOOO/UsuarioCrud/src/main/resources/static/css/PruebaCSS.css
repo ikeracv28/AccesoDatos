@@ -78,3 +78,96 @@ body {
     transform: translateY(-2px);
     filter: brightness(0.9);
 }
+
+:root {
+    --main-col: #ffeba7;        /* Dorado del login */
+    --bg-col: #2a2b38;          /* Azul grisáceo oscuro */
+    --bg-field: #1f2029;       /* Fondo más profundo */
+    --white: #dedede;
+}
+
+body {
+    background-color: #333 !important; /* Fondo gris muy oscuro del login */
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--white);
+    margin: 0;
+}
+
+/* Header Estilo Cyber */
+.navbar {
+    background-color: var(--bg-field) !important;
+    border-bottom: 2px solid var(--main-col);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.navbar-brand {
+    color: var(--main-col) !important;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-shadow: 1px 1px 15px var(--main-col);
+}
+
+/* El Saludo Brilla */
+#saludoUsuario {
+    color: var(--main-col) !important;
+    text-shadow: 1px 1px 20px rgba(255, 235, 167, 0.4);
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+#saludoUsuario .text-primary {
+    color: var(--main-col) !important; /* Cambiamos el azul por dorado */
+}
+
+/* La Tarjeta de Perfil (Igual a la del Login) */
+.container-main {
+    max-width: 800px;
+    margin: 40px auto;
+    background: var(--bg-col);
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid var(--main-col);
+    box-shadow: 0 8px 24px 0 rgba(255, 235, 167, 0.2);
+    text-align: center;
+}
+
+/* Tabla Estilo Oscuro */
+.table-container {
+    background: var(--bg-field);
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid rgba(255, 235, 167, 0.1);
+}
+
+.table {
+    color: var(--white) !important;
+}
+
+.table thead {
+    border-bottom: 2px solid var(--main-col);
+}
+
+.table thead th {
+    color: var(--main-col) !important;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+/* Botones Estilo Login */
+.btn-danger, .btn-primary, .btn-info {
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0.7em 1.5em;
+    background-color: var(--main-col) !important;
+    color: var(--bg-col) !important;
+    box-shadow: 0 8px 24px 0 rgba(255, 235, 167, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-danger:hover {
+    background-color: var(--bg-field) !important;
+    color: var(--main-col) !important;
+    transform: translateY(-2px);
+}

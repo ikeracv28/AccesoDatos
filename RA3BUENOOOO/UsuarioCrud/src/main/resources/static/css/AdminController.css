@@ -1,194 +1,203 @@
+/* --- VARIABLES MAESTRAS --- */
 :root {
-    --bg-main: #f0f2f5;
-    --dark-panel: #212529;
-    --white: #ffffff;
+    --main-col: #ffeba7;        /* Dorado */
+    --bg-col: #2a2b38;          /* Fondo Tarjetas y Modales */
+    --bg-darker: #1f2029;       /* Fondo Inputs y Tablas */
+    --bg-body: #333;            /* Fondo Body */
+    --text-white: #ceb367;      /* Texto suave */
+    --shadow-gold: rgba(255, 235, 167, 0.25);
 }
 
-body {
-    background-color: var(--bg-main) !important;
+/* --- BASE --- */
+html, body {
+    background-color: var(--bg-body) !important;
     font-family: 'Segoe UI', sans-serif;
+    color: var(--text-white);
+    margin: 0;
+    height: 100%;
 }
 
-/* Header */
+/* --- NAVBAR --- */
 .navbar {
-    background-color: var(--dark-panel) !important;
+    background-color: var(--bg-darker) !important;
+    border-bottom: 2px solid var(--main-col);
+}
+.navbar-brand {
+    color: var(--main-col) !important;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--shadow-gold);
 }
 
-/* Tarjeta Principal */
+/* --- CONTENEDORES --- */
 .container-main {
-    max-width: 1000px; /* Un poco más ancha para la lista */
-    margin: 0 auto 50px auto;
-    background: var(--white);
-    padding: 35px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    background: var(--bg-col);
+    border: 1px solid var(--main-col);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 8px 24px var(--shadow-gold);
+    max-width: 1000px;
+    margin: 40px auto;
 }
 
-/* Tabla y Efecto Hover */
-.table-container {
-    border: 1px solid #dee2e6;
+/* --- TABLAS --- */
+.table-responsive {
+    background: var(--bg-darker);
     border-radius: 8px;
-    overflow: hidden;
-    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid rgba(255, 235, 167, 0.1);
+    margin-top: 20px;
+}
+.table { color: var(--text-white) !important; }
+.table thead th {
+    color: #f1e6b0 !important;
+    border-bottom: 2px solid var(--main-col) !important;
+    text-transform: uppercase;
+    background: transparent !important;
+}
+.table tbody td {
+    border-color: rgba(255, 235, 167, 0.1) !important;
+    background: transparent !important;
+    color: var(--text-white);
 }
 
-.table thead {
-    background-color: var(--dark-panel) !important;
-    color: white !important;
+/* --- BOTONES --- */
+.btn {
+    border: none !important;
+    border-radius: 4px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    padding: 0.6em 1.5em !important;
+    background-color: var(--main-col) !important;
+    color: var(--bg-col) !important;
+    box-shadow: 0 5px 15px var(--shadow-gold) !important;
+    transition: all 0.3s ease !important;
 }
-
-/* EFECTO HOVER MEJORADO */
-.table-hover tbody tr {
-    transition: all 0.2s ease;
-    cursor: default;
+.btn:hover {
+    background-color: var(--bg-darker) !important;
+    color: var(--main-col) !important;
+    transform: translateY(-2px);
 }
-
-.table-hover tbody tr:hover {
-    background-color: rgba(13, 110, 253, 0.05) !important; /* Azul muy clarito */
-    transform: scale(1.005); /* Crece un pelín */
-    box-shadow: inset 4px 0 0 #0d6efd; /* Linea azul a la izquierda */
+/* Botón especial para Cerrar Sesión */
+.btn-danger-custom {
+    background-color: #ff8e8e !important;
+    color: #333 !important;
 }
-
-/* Badges */
-.badge {
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-weight: 600;
-}
-
-/* Modales */
-.modal-content {
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-}
-
-/* Estilos para el Modal Nativo <dialog> */
-.custom-dialog {
-    border: none;
-    border-radius: 12px;
-    padding: 0;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-
-/* Animación de apertura */
-.custom-dialog[open] {
-    animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* El fondo oscuro detrás del modal */
-.custom-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(3px);
-}
-
-.dialog-header {
-    background: var(--dark-panel);
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.btn-close-dialog {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.dialog-body { padding: 20px; }
-.dialog-footer {
-    padding: 15px 20px;
-    border-top: 1px solid #dee2e6;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-/* --- Estilo Pro del Dialog Nativo --- */
-.custom-dialog {
-    border: none;
-    border-radius: 12px;
-    padding: 0;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-}
-
-/* El fondo (overlay) que oscurece el resto de la página */
-.custom-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px); /* Un toque moderno de desenfoque */
-}
-
-/* Encabezado del modal */
-.dialog-header {
-    background: #212529; /* Negro como tu navbar */
-    color: white;
-    padding: 1.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.btn-close-dialog {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    line-height: 1;
-    cursor: pointer;
-    opacity: 0.8;
-}
-
-.btn-close-dialog:hover {
-    opacity: 1;
-}
-
-/* Cuerpo y Pie */
-.dialog-body { padding: 1.5rem; }
-.dialog-footer {
-    padding: 1rem 1.5rem;
-    background: #f8f9fa;
-    border-top: 1px solid #dee2e6;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-/* Animación de apertura */
-.custom-dialog[open] {
-    animation: zoomIn 0.25s ease-out;
-}
-
-@keyframes zoomIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* Limpieza visual del modal nativo */
-.custom-dialog select,
-.custom-dialog input {
-    appearance: none; /* Quita estilos nativos extraños */
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 16px 12px;
-}
-
-/* Forzar que el select no tenga bordes internos dobles */
-#editRol {
-    border: 1px solid #dee2e6 !important;
+.btn-link {
+    color: var(--main-col) !important;
+    text-decoration: none;
+    background: transparent !important;
     box-shadow: none !important;
+}
+.btn-link:hover { text-decoration: underline; }
+
+/* --- MODAL (DIALOG) --- */
+.custom-dialog {
+    background: var(--bg-col) !important;
+    border: 1px solid var(--main-col) !important;
+    border-radius: 10px;
+    padding: 0 !important;
+    width: 400px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    color: var(--main-col);
+    margin: auto;
+}
+.custom-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+}
+.dialog-header { /* Título del modal */
+    background: var(--bg-darker);
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--main-col);
+    text-align: center;
+}
+.title { margin: 0; font-weight: bold; text-transform: uppercase; }
+.dialog-body { padding: 2rem; }
+.dialog-footer {
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- INPUTS Y SELECTS --- */
+.field {
+    background-color: var(--bg-darker);
+    border-radius: 4px;
+    margin-bottom: 1.2rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+}
+.input-field {
+    background: transparent !important;
+    border: none !important;
+    color: var(--main-col) !important;
     outline: none !important;
+    width: 100%;
+}
+.input-field::placeholder { color: rgba(255, 235, 167, 0.3); }
+.field:focus-within { border-color: var(--main-col); }
+
+/* --- ARREGLO DEFINITIVO DESPLEGABLES (SELECTS) --- */
+select.input-field, select.form-select-custom {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffeba7%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem top 50%;
+    background-size: 0.65rem auto;
+    padding-right: 2.5rem;
+    background-color: var(--bg-darker) !important;
+    color: var(--main-col) !important;
+}
+
+/* Forzar opciones oscuras al desplegar */
+select option {
+    background-color: var(--bg-darker) !important;
+    color: var(--main-col) !important;
+    padding: 10px;
+}
+
+/* Asegurar que el título de saludo brille */
+#saludoUsuario {
+    color: var(--main-col) !important;
+    text-shadow: 0 0 15px var(--shadow-gold);
+    text-transform: uppercase;
+}
+
+#saludoUsuario .text-primary {
+    color: var(--main-col) !important;
+}
+
+/* Asegurar que los badges en la tabla tengan el estilo correcto */
+.table .badge {
+    background-color: var(--bg-darker) !important;
+    border: 1px solid var(--main-col);
+    color: var(--main-col) !important;
+    text-transform: uppercase;
+}
+
+/* --- BOTÓN DE CREAR USUARIO (Verde Cyber) --- */
+.btn-add {
+    background-color: #2ecc71 !important; /* Verde Esmeralda */
+    color: #2a2b38 !important;            /* Texto oscuro para contraste */
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3) !important;
+}
+
+.btn-add:hover {
+    background-color: #27ae60 !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(46, 204, 113, 0.5) !important;
+}
+
+/* --- CONTENEDOR DE BOTONES UNIFORME --- */
+.buttons-container {
+    display: flex;
+    justify-content: center; /* Centrados horizontalmente */
+    align-items: center;
+    gap: 20px; /* Espacio uniforme entre todos los botones */
+    flex-wrap: wrap; /* Para que bajen si la pantalla es muy pequeña */
+    margin-top: 3rem;
 }

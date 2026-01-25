@@ -35,42 +35,39 @@
 
 <dialog id="editDialog" class="custom-dialog">
     <div class="dialog-header">
-        <h5 class="fw-bold mb-0">Editar Usuario</h5>
-        <button type="button" class="btn-close-dialog" onclick="window.editDialog.close()">×</button>
+        <h4 class="mb-0 text-uppercase">Editar Usuario</h4>
     </div>
     <form id="editForm">
         <div class="dialog-body">
             <input type="hidden" id="editId">
 
-            <div class="mb-3">
-                <label class="form-label fw-bold">Username</label>
-                <input type="text" id="editUsername" class="form-control" required>
+            <div class="field">
+                <label>Username</label>
+                <input type="text" id="editUsername" class="input-field" required>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold">Rol</label>
-                <select id="editRol" class="form-select">
-                    <option value="ADMIN">ADMIN</option>
-                    <option value="USER">USER</option>
+            <div class="field">
+                <label>Rol</label>
+                <select id="editRol" class="form-select-custom">
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold">Estado</label>
-                <select id="editEstado" class="form-select">
-                    <option value="true">Activo</option>
-                    <option value="false">Inactivo</option>
+            <div class="field">
+                <label>Estado</label>
+                <select id="editEstado" class="form-select-custom">
+                    <option value="true">ACTIVO</option>
+                    <option value="false">INACTIVO</option>
                 </select>
             </div>
-            <div class="mb-3">
-                <label class="form-label fw-bold">Departamento</label>
-                <input type="text" id="editNombreDepartamento" class="form-control" required>
-            </div>
 
+            <div class="field">
+                <label>Departamento</label>
+                <input type="text" id="editNombreDepartamento" class="input-field" required>
+            </div>
         </div>
-        <div class="dialog-footer">
-            <button type="button" class="btn btn-secondary" onclick="window.editDialog.close()">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <div class="dialog-footer p-3 d-flex justify-content-between">
+            <button type="button" class="btn btn-danger-custom" onclick="editDialog.close()">Cancelar</button>
+            <button type="submit" class="btn">Guardar</button>
         </div>
     </form>
 </dialog>

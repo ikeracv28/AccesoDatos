@@ -32,8 +32,8 @@ fetch('/user/datos', {})
         const fecha = data.fechaCreacion ? new Date(data.fechaCreacion).toLocaleDateString() : '-';
 
         datosMostrar.innerHTML = `
-        <div class="table-container">
-            <table class="table table-hover align-middle">
+        <div class="table-container"> 
+            <table class="table table-hover align-middle mb-0">
                 <thead>
                     <tr>
                         <th class="ps-3">ID</th>
