@@ -70,6 +70,7 @@ function cargarDatosPerfil() {
                                 <th class="ps-3">ID</th>
                                 <th>Username</th>
                                 <th>Rol</th>
+                                <th>Departamento</th>
                                 <th>Fecha Creación</th>
                             </tr>
                         </thead>
@@ -78,6 +79,7 @@ function cargarDatosPerfil() {
                                 <td class="ps-3 fw-bold text-muted">${data.idUsuario}</td>
                                 <td class="fw-bold">${data.username}</td>
                                 <td><span class="badge bg-dark px-3 py-2 text-uppercase">${data.nombreRol}</span></td>
+                                <td class="fw-bold">${data.nombreDepartamento}</td>
                                 <td class="text-muted">${fecha}</td>
                             </tr>
                         </tbody>
@@ -103,6 +105,7 @@ function cargarUsuarios() {
                             <th class="ps-3">ID</th>
                             <th>Username</th>
                             <th>Rol</th>
+                            <th>Departamento</th>
                             <th>Fecha</th>
                             <th>Estado</th>
                             <th class="text-center">Acciones</th>
@@ -120,13 +123,14 @@ function cargarUsuarios() {
                     <tr>
                         <td class="ps-3 fw-bold text-muted">${usuario.idUsuario}</td>
                         <td class="fw-bold">${usuario.username}</td>
-                        <td><span class="badge bg-info text-dark">${usuario.nombreRol}</span></td>                       
+                        <td><span class="badge bg-info text-dark">${usuario.nombreRol}</span></td>   
+                        <td class="fw-bold">${usuario.nombreDepartamento}</td>                    
                         <td>${fecha}</td>
                         <td>${estadoBadge}</td>
                         <td class="text-center">
                             <div class="btn-group">
                                 <button class="btn btn-sm btn-warning fw-bold px-3" 
-                                    onclick="prepararEdicion('${usuario.idUsuario}', '${usuario.username}', '${usuario.nombreRol}', ${usuario.estado})">
+                                    onclick="prepararEdicion('${usuario.idUsuario}', '${usuario.username}', '${usuario.nombreRol}', '${usuario.nombreDepartamento}',${usuario.estado})">
                                     Editar
                                 </button>
                                 <button class="btn btn-sm btn-danger fw-bold px-3" 
@@ -143,7 +147,7 @@ function cargarUsuarios() {
 }
 
 // --- FUNCIONES DEL MODAL <DIALOG> ---
-async function prepararEdicion(id, username, rol, estado) {
+async function prepararEdicion(id, username, rol, departamento, estado) {
     // 1. Cargamos los roles primero y esperamos a que termine
     await cargarRolesEnSelect();
 
@@ -154,6 +158,8 @@ async function prepararEdicion(id, username, rol, estado) {
     // 3. Asignamos el rol (ahora que sabemos que las opciones existen)
     const selectRol = document.getElementById('editRol');
     selectRol.value = rol;
+
+    document.getElementById('editNombreDepartamento').value = departamento;
 
     document.getElementById('editEstado').value = estado.toString();
 
@@ -199,6 +205,7 @@ function enviarActualizacion(e) {
         idUsuario: document.getElementById('editId').value,
         username: document.getElementById('editUsername').value,
         nombreRol: document.getElementById('editRol').value,
+        nombreDepartamento : document.getElementById('editNombreDepartamento').value,
         estado: document.getElementById('editEstado').value === 'true'
     };
 

@@ -41,7 +41,7 @@ public class AdminController {
         }
         try {
             Optional<Usuario> usuarioOptional = usuarioService.buscarUsuario(usuarioSesionDTO.getUsername());
-            UsuarioSesionDTO usuarioAmostrar = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().iterator().next().getNombre(), usuarioOptional.get().getFechaCreacion());
+            UsuarioSesionDTO usuarioAmostrar = new UsuarioSesionDTO(usuarioOptional.get().getIdUsuario(), usuarioOptional.get().getUsername(), usuarioOptional.get().getRoles().iterator().next().getNombre(), usuarioOptional.get().getFechaCreacion(), usuarioOptional.get().getDepartamento().getNombre_departamento());
 
             return ResponseEntity.ok(usuarioAmostrar);
 
@@ -74,7 +74,7 @@ public class AdminController {
             lista = usuarioService.mostrarUsuariosService();
             for (Usuario usuario : lista) {
 
-                listaDTO.add(new UsuarioSesionDTO(usuario.getIdUsuario(), usuario.getUsername(), usuario.getRoles().iterator().next().getNombre(), usuario.getFechaCreacion(), usuario.isActivo()));
+                listaDTO.add(new UsuarioSesionDTO(usuario.getIdUsuario(), usuario.getUsername(), usuario.getRoles().iterator().next().getNombre(), usuario.getFechaCreacion(), usuario.isActivo(), usuario.getDepartamento().getNombre_departamento()));
 
             }
 

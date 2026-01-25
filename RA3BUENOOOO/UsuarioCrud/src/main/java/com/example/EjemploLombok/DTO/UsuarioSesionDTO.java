@@ -17,11 +17,13 @@ public class UsuarioSesionDTO implements Serializable {
     private String nombreRol;
     private LocalDateTime fechaCreacion;
     private boolean estado;
+    private String nombreDepartamento;
 
-    public UsuarioSesionDTO(int idUsuario, String username, String nombreRol, LocalDateTime fechaCreacion) {
+    public UsuarioSesionDTO(int idUsuario, String username, String nombreRol, LocalDateTime fechaCreacion, String nombreDepartamento) {
         this.idUsuario = idUsuario;
         this.fechaCreacion = fechaCreacion;
         this.nombreRol = nombreRol;
         this.username = username;
+        this.nombreDepartamento = nombreDepartamento;
     }
 }

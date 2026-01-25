@@ -39,6 +39,7 @@ fetch('/user/datos', {})
                         <th class="ps-3">ID</th>
                         <th>Username</th>
                         <th>Rol</th>
+                        <th>Departamento</th>                       
                         <th>Fecha Creación</th>
                     </tr>
                 </thead>
@@ -47,6 +48,7 @@ fetch('/user/datos', {})
                         <td class="ps-3 fw-bold text-muted">${data.idUsuario}</td>
                         <td class="fw-bold">${data.username}</td>
                         <td><span class="badge bg-primary">${data.nombreRol}</span></td>
+                        <td class="fw-bold">${data.nombreDepartamento}</td>                       
                         <td class="text-muted">${fecha}</td>
                     </tr>
                 </tbody>
