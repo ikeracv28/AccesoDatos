@@ -2,14 +2,29 @@ DROP DATABASE IF EXISTS crudUsuarioIker;
 CREATE DATABASE IF NOT EXISTS crudUsuarioIker;
 USE crudUsuarioIker;
 
+
+CREATE TABLE departamento(
+                             id_departamento int auto_increment primary key not null,
+                             nombre_departamento varchar(100)
+);
+
+
+
+
+
 CREATE TABLE usuario(
     id int auto_increment primary key not null,
     username varchar(100) unique not null,
     password varchar(255) not null,
+    id_departamento int,
     activo tinyint(1) default 1,
     fecha_creacion timestamp default current_timestamp,
-    fecha_actualizacion timestamp default current_timestamp
+    fecha_actualizacion timestamp default current_timestamp,
+    FOREIGN KEY (id_departamento) references departamento(id_departamento)
+        on delete set null on update cascade
+
 );
+
 
 create table rol(
     id_rol int auto_increment primary key not null,
@@ -25,11 +40,15 @@ create table usuario_rol(
 );
 
 
-INSERT INTO usuario ( username, password) values ('Iker','$2a$12$CzdU7n41SWsBnlPVerrdu.rAHZGeeYxXqkZYyyraM0YxrT6ry4b.2');
-INSERT INTO usuario ( username, password) values ('Rafa','$2a$12$CzdU7n41SWsBnlPVerrdu.rAHZGeeYxXqkZYyyraM0YxrT6ry4b.2');
+insert into departamento (nombre_departamento) values ('IT');
+insert into departamento (nombre_departamento) values ('RRHH');
+
+INSERT INTO usuario ( username, password, id_departamento ) values ('Iker','$2a$12$CzdU7n41SWsBnlPVerrdu.rAHZGeeYxXqkZYyyraM0YxrT6ry4b.2', 1);
+INSERT INTO usuario ( username, password, id_departamento ) values ('Rafa','$2a$12$CzdU7n41SWsBnlPVerrdu.rAHZGeeYxXqkZYyyraM0YxrT6ry4b.2', 2);
 
 insert into rol (nombre) values ('admin');
 insert into rol (nombre) values ('user');
+
 
 insert into usuario_rol(id, id_rol) values (1, 1);
 insert into usuario_rol(id, id_rol) values (2, 2);
